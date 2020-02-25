@@ -25,19 +25,23 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import {NativeRouter, Switch, Route} from 'react-router-native';
-
+import firebase from 'firebase';
 import LandingPage from './components/LandingPage'
 import SignUp from './components/SignUp';
 import ContactUs from './components/ContactUs';
+import Gallary from './components/Gallary';
+import Browse from './components/Browse'
 
 const App: () => React$Node = () => {
   return (
     <NativeRouter>
       <SafeAreaView style={styles.container}>
         <Switch>
-          <Route exact path="/" component={LandingPage} />
+          <Route exact path="/h" component={LandingPage} />
           <Route exact path="/contactus" component={ContactUs} />
           <Route path="/signup" component={SignUp} />
+          <Route path="/g" component={Gallary} />
+          <Route path="/soso" component={Browse} />
         </Switch>
       </SafeAreaView>
     </NativeRouter>

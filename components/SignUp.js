@@ -2,16 +2,8 @@ import React, {Component} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
-  Image,
-  TouchableWithoutFeedback,
-  TextInput,
-  Keyboard,
-  TouchableOpacity,
-  KeyboardAvoidingView,
   Button,
 } from 'react-native';
 import Input from './Input';

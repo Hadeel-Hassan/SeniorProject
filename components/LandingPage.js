@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,11 +12,10 @@ import {
   Keyboard,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Button
-} from "react-native";
-import Input from "./Input";
-import SignUp from "./SignUp";
-
+  Button,
+} from 'react-native';
+import Input from './Input';
+import SignUp from './SignUp';
 
 export default class LandingPage extends Component {
   render() {
@@ -27,18 +26,17 @@ export default class LandingPage extends Component {
             <Text style={styles.title}>
               <Image
                 style={styles.logo}
-                source={require("../images/logo_v1.png")}
-              ></Image>{" "}
+                source={require('../images/logo_v1.png')}></Image>{' '}
               مرحبا بك في
-              <Text style={styles.title}>{"\n"}Saui Vibes</Text>
+              <Text style={styles.title}>{'\n'}Saui Vibes</Text>
             </Text>
             <View>
-              <Text style={styles.newUser}>
-                هل أنت مستخدم جديد؟
-              </Text>
-              <Button title="حساب جديد" 
-              style={styles.newUserBtn}
-              onPress={() => this.props.history.push("/signup")} />
+              <Text style={styles.newUser}>هل أنت مستخدم جديد؟</Text>
+              <Button
+                title="حساب جديد"
+                style={styles.newUserBtn}
+                onPress={() => this.props.history.push('/signup')}
+              />
             </View>
             <View style={styles.signInContainer}>
               <Input Label="أدخل اسم المستخدم / البريد الالكتروني" />
@@ -46,7 +44,11 @@ export default class LandingPage extends Component {
               <Button title="تسجيل الدخول" />
             </View>
             <View style={styles.sigin_skip}>
-              <Button title="تخطى للآن" style={styles.skip_text}/> 
+              <Button
+                title="تخطى للآن"
+                style={styles.skip_text}
+                onPress={() => this.props.history.push('/gallary')}
+              />
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -57,61 +59,61 @@ export default class LandingPage extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgb(32, 53, 70) ",
+    backgroundColor: 'rgb(32, 53, 70) ',
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center"
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
-    position: "relative",
+    position: 'relative',
     fontSize: 35,
-    color: "white",
+    color: 'white',
     opacity: 0.9,
-    height: 250
+    height: 250,
   },
   logo: {
-    position: "relative",
+    position: 'relative',
     width: 128,
     height: 150,
-    marginLeft: 190
+    marginLeft: 190,
   },
   signInContainer: {
-    position: "relative",
+    position: 'relative',
     left: 0,
     right: 0,
     bottom: 0,
     height: 200,
-    padding: 20
+    padding: 20,
   },
   input: {
     height: 40,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     paddingHorizontal: 70,
-    color: "#fff",
+    color: '#fff',
     marginBottom: 20,
-    textAlign: "right"
+    textAlign: 'right',
   },
   sigin_skip: {
-    marginTop: 25
+    marginTop: 25,
   },
   skip_text: {
-    color: "rgb(178, 227, 250)",
+    color: 'rgb(178, 227, 250)',
     fontSize: 23,
-    fontWeight: "bold",
-    position: "absolute",
+    fontWeight: 'bold',
+    position: 'absolute',
     right: 0,
   },
   newUser: {
     fontSize: 20,
-    color: "rgb(238, 238, 238)",
-    width: 200
+    color: 'rgb(238, 238, 238)',
+    width: 200,
   },
   newUserBtn: {
-    width: 50
+    width: 50,
   },
   newUserClick: {
-    color: "rgb(178, 227, 250)",
+    color: 'rgb(178, 227, 250)',
     fontSize: 21,
-    fontWeight: "bold"
-  }
+    fontWeight: 'bold',
+  },
 });
