@@ -14,9 +14,11 @@ import {
   KeyboardAvoidingView,
   Button,
 } from 'react-native';
+// import {Button, Icon} from 'native-base';
+import {BottomNavigation} from 'react-native-material-ui';
 import Input from './Input';
 import SignUp from './SignUp';
-
+// import Icon from 'react-native-vector-icons/MaterialIcons';
 export default class LandingPage extends Component {
   render() {
     return (
@@ -30,6 +32,12 @@ export default class LandingPage extends Component {
               مرحبا بك في
               <Text style={styles.title}>{'\n'}Saui Vibes</Text>
             </Text>
+
+            <View style={styles.signInContainer}>
+              <Input Label="أدخل اسم المستخدم / البريد الالكتروني" />
+              <Input Label="أدخل كلمة المرور" />
+              <Button title="تسجيل الدخول" />
+            </View>
             <View>
               <Text style={styles.newUser}>هل أنت مستخدم جديد؟</Text>
               <Button
@@ -38,16 +46,11 @@ export default class LandingPage extends Component {
                 onPress={() => this.props.history.push('/signup')}
               />
             </View>
-            <View style={styles.signInContainer}>
-              <Input Label="أدخل اسم المستخدم / البريد الالكتروني" />
-              <Input Label="أدخل كلمة المرور" />
-              <Button title="تسجيل الدخول" />
-            </View>
             <View style={styles.sigin_skip}>
               <Button
-                title="تخطى للآن"
-                style={styles.skip_text}
-                onPress={() => this.props.history.push('/gallary')}
+                title="تخطى للآن >"
+                style={styles.skip_btn}
+                onPress={() => this.props.history.push('/home')}
               />
             </View>
           </View>
@@ -59,7 +62,7 @@ export default class LandingPage extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgb(32, 53, 70) ',
+    backgroundColor: 'rgb(32, 53, 70)',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -96,12 +99,12 @@ const styles = StyleSheet.create({
   sigin_skip: {
     marginTop: 25,
   },
-  skip_text: {
-    color: 'rgb(178, 227, 250)',
-    fontSize: 23,
+  skip_btn: {
+    width: 200,
     fontWeight: 'bold',
-    position: 'absolute',
-    right: 0,
+    alignItems: 'center',
+    fontSize: 19,
+    textAlign: 'center',
   },
   newUser: {
     fontSize: 20,
