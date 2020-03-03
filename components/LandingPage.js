@@ -34,8 +34,24 @@ export default class LandingPage extends Component {
             </Text>
 
             <View style={styles.signInContainer}>
-              <Input Label="أدخل اسم المستخدم / البريد الالكتروني" />
-              <Input Label="أدخل كلمة المرور" />
+              <TextInput
+                style={styles.input}
+                placeholder="أدخل البريد الإلكتروني"
+                placeholderTextColor="rgba(255,255,255,0.8)"
+                keyboardType="email-address"
+                returnKeyType="next"
+                autoCorrect={false}
+                // onChangeText={onChangeText}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="أدخل كلمة المرور"
+                placeholderTextColor="rgba(255,255,255,0.8)"
+                returnKeyType="next"
+                autoCorrect={false}
+                secureTextEntry
+                // onChangeText={onChangeText}
+              />
               <Button title="تسجيل الدخول" />
             </View>
             <View>
@@ -90,11 +106,11 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
     paddingHorizontal: 70,
-    color: '#fff',
+    color: "#fff",
     marginBottom: 20,
-    textAlign: 'right',
+    textAlign: "right"
   },
   sigin_skip: {
     marginTop: 25,
