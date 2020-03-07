@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import {Text, StyleSheet} from 'react-native';
-import BottomNav from './BottomNav'
+import BottomNavRegUser from './BottomNavRegUser'
+import TopNav from './TopNav'
 export default class Favorite extends Component {
     render() {
         return (
             <>
+            <TopNav />
             <Text style={styles.fav_text}>
                 ليس لديك فعاليات في المفضلة.
             </Text>
-            <BottomNav history={this.props.history}/>
+            <BottomNavRegUser history={this.props.history}/>
             </>
         )
     }
@@ -16,8 +18,11 @@ export default class Favorite extends Component {
 
 const styles = StyleSheet.create({
 fav_text: {
-    marginBottom: 260,
-    marginTop: 300,
-    fontSize: 25,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // position: 'absolute'
+    // flexDirection: 'row'
+    marginVertical: '50%'
 }
 })
