@@ -12,32 +12,41 @@ import {
   Keyboard,
   TouchableOpacity,
   KeyboardAvoidingView,
+  TouchableNativeFeedback,
   Button,
+  Alert,
 } from 'react-native';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 // import {Button, Icon} from 'native-base';
 import {BottomNavigation} from 'react-native-material-ui';
 import Input from './Input';
 import SignUp from './SignUp';
+import {faArrowAltCircleLeft} from '@fortawesome/free-solid-svg-icons';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
 export default class LandingPage extends Component {
   render() {
+    // function skip() {
+    //   ;
+    //   // Alert.alert('Good', 'This worked!', [{text: 'close'}]);
+    // }
     return (
       <>
-        <KeyboardAvoidingView behavior="padding" style={styles.container}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            Keyboard.dismiss();
+          }}>
           <View style={styles.container}>
-            <Text style={styles.title}>
-              <Image
-                style={styles.logo}
-                source={require('../images/logo_v1.png')}></Image>{' '}
-              مرحبا بك في
-              <Text style={styles.title}>{'\n'}Saui Vibes</Text>
-            </Text>
+            <Image
+              style={styles.logo}
+              source={require('../images/logo_v1.png')}></Image>
+            <Text style={styles.title}>مرحبا بك في {'\n'} Saudi Vibes</Text>
 
             <View style={styles.signInContainer}>
+              {/* multiline */}
               <TextInput
                 style={styles.input}
                 placeholder="أدخل البريد الإلكتروني"
-                placeholderTextColor="rgba(255,255,255,0.8)"
+                placeholderTextColor="darkgray"
                 keyboardType="email-address"
                 returnKeyType="next"
                 autoCorrect={false}
@@ -46,31 +55,39 @@ export default class LandingPage extends Component {
               <TextInput
                 style={styles.input}
                 placeholder="أدخل كلمة المرور"
-                placeholderTextColor="rgba(255,255,255,0.8)"
+                placeholderTextColor="darkgray"
                 returnKeyType="next"
                 autoCorrect={false}
                 secureTextEntry
                 // onChangeText={onChangeText}
               />
-              <Button title="تسجيل الدخول" />
-            </View>
-            <View>
-              <Text style={styles.newUser}>هل أنت مستخدم جديد؟</Text>
               <Button
-                title="حساب جديد"
-                style={styles.newUserBtn}
-                onPress={() => this.props.history.push('/signup')}
+                style={styles.signInBtn}
+                color="rgb(1, 106, 167)"
+                title="تسجيل الدخول"
               />
-            </View>
-            <View style={styles.sigin_skip}>
-              <Button
-                title="تخطى للآن >"
-                style={styles.skip_btn}
-                onPress={() => this.props.history.push('/home')}
-              />
+              <View style={styles.newUserContainer}>
+                <Button
+                  title="حساب جديد"
+                  style={styles.newUserBtn}
+                  onPress={() => this.props.history.push('/signup')}
+                  color="rgb(1, 106, 167)"
+                />
+                <Text style={styles.newUser}>هل أنت مستخدم جديد؟</Text>
+              </View>
             </View>
           </View>
-        </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+        <View style={styles.skipContainer}>
+          <TouchableOpacity style={styles.skip} onPress={() => this.props.history.push('/home')}>
+            <FontAwesomeIcon
+              icon={faArrowAltCircleLeft}
+              size={35}
+              color="rgb(56, 56, 56)"
+            />
+            <Text style={styles.skip_txt}>تخطي</Text>
+          </TouchableOpacity>
+        </View>
       </>
     );
   }
@@ -78,61 +95,69 @@ export default class LandingPage extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'rgb(32, 53, 70)',
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: -10,
   },
   title: {
-    position: 'relative',
+    // position: 'relative',
     fontSize: 35,
-    color: 'white',
+    color: 'black',
     opacity: 0.9,
-    height: 250,
   },
   logo: {
-    position: 'relative',
-    width: 128,
+    // position: 'relative',
+    width: 132,
     height: 150,
-    marginLeft: 190,
   },
   signInContainer: {
-    position: 'relative',
-    left: 0,
-    right: 0,
-    bottom: 0,
+    // position: 'relative',
     height: 200,
     padding: 20,
+    zIndex: -100,
   },
   input: {
     height: 40,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
     paddingHorizontal: 70,
-    color: "#fff",
     marginBottom: 20,
-    textAlign: "right"
+    textAlign: 'right',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
-  sigin_skip: {
-    marginTop: 25,
+  skipContainer: {
+    zIndex: +1000,
+    alignSelf: 'flex-start',
+    position: 'relative',
+    top: 60,
+    left: 20
   },
-  skip_btn: {
-    width: 200,
-    fontWeight: 'bold',
+  skip: {
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
-    fontSize: 19,
+  },
+  skip_txt: {
+    fontWeight: 'bold',
+    fontSize: 17,
     textAlign: 'center',
+    marginLeft: 10,
   },
   newUser: {
-    fontSize: 20,
-    color: 'rgb(238, 238, 238)',
+    fontSize: 17,
+    color: 'rgb(56, 56, 56)',
     width: 200,
+    textAlign: 'center',
+    marginTop: 5,
+    zIndex: 10,
   },
-  newUserBtn: {
-    width: 50,
+  signInBtn: {
+    marginVertical: 20,
+    // zIndex: 10,
   },
-  newUserClick: {
-    color: 'rgb(178, 227, 250)',
-    fontSize: 21,
-    fontWeight: 'bold',
+  newUserContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginVertical: 10,
   },
 });
