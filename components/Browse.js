@@ -8,120 +8,157 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import BottomNav from './BottomNav'
-import TopNav from './TopNav'
-import {Container, Header, Item, Input, Row, Button} from 'native-base';
+import BottomNavRegUser from './BottomNavRegUser';
+import TopNav from './TopNav';
+import {
+  Container,
+  Header,
+  Item,
+  Input,
+  Row,
+  Button,
+  Segment,
+  Left,
+  Right,
+  Icon,
+  Body,
+} from 'native-base';
 
 // import Icon from 'react-native-vector-icons';
 
 export default class Browse extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: [
-        {
-          albumId: 1,
-          id: 1,
-          title: '  فعالية انا عربية     ',
-          time: '       ٢٥ اكتوبر - ١٨ مارس  ',
-          url1: 'https://image.flaticon.com/icons/svg/747/747310.svg',
-          url:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTaW9FIswMCuOA3bvjpF2JPgxqc_GThEdE-W2Kw52SH1XdD_JIT',
-          thumbnailUrl: 'https://via.placeholder.com/150/92c952',
-        },
-        {
-          albumId: 1,
-          id: 2,
-          title: 'حفلة سوبر جونيور   ',
-          time: '        ٤ يناير- ٥فبراير',
-          url1: 'https://image.flaticon.com/icons/svg/747/747310.svg',
-          url:
-            'https://storage.sharek.sa/public/uploads/events/music-concert-super-junior-ar-1562161345-poster.png',
-          thumbnailUrl: 'https://via.placeholder.com/150/771796',
-        },
-        {
-          albumId: 1,
-          id: 3,
-          title: 'ونتر لاند',
-          time: '                            ٤ مارس - ٩ابريل',
-          url1: 'https://image.flaticon.com/icons/svg/747/747310.svg',
-          url:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT3VKXRBsmNCOLnV67X4Be_ZY4GFcKn6IWiajylhFF1v2HYBoTN',
-          thumbnailUrl: 'https://via.placeholder.com/150/24f355',
-        },
-        {
-          albumId: 1,
-          id: 4,
-          title: 'مهرجان الرعب',
-          time: '                ٧ فبراير - ١١ ابريل',
-          url1: 'https://image.flaticon.com/icons/svg/747/747310.svg',
-          url:
-            'https://images.akhbarelyom.com//images/images/medium/20191013155720344.jpg',
-          thumbnailUrl: 'https://via.placeholder.com/150/d32776',
-        },
-        {
-          albumId: 1,
-          id: 5,
-          title: 'معرض الاينمي السعودي',
-          time: '     ٢٥ اكتوبر - ١٨ مارس',
-          url1: 'https://image.flaticon.com/icons/svg/747/747310.svg',
-          url:
-            'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTtRMDIclFC0pN2Nddv9obOZeZAPyRvlUtrRpHCGA4O4KFyVEhu',
-          thumbnailUrl: 'https://via.placeholder.com/150/f66b97',
-        },
-      ],
-    };
-  }
-  // componentDidMount() {
-  //   this.getDataFromAPI();
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     items: [
+  //       {
+  //         albumId: 1,
+  //         id: 1,
+  //         title: '  فعالية انا عربية     ',
+  //         time: '       ٢٥ اكتوبر - ١٨ مارس  ',
+  //         url1: 'https://image.flaticon.com/icons/svg/747/747310.svg',
+  //         url:
+  //           'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTaW9FIswMCuOA3bvjpF2JPgxqc_GThEdE-W2Kw52SH1XdD_JIT',
+  //         thumbnailUrl: 'https://via.placeholder.com/150/92c952',
+  //       },
+  //       {
+  //         albumId: 1,
+  //         id: 2,
+  //         title: 'حفلة سوبر جونيور   ',
+  //         time: '        ٤ يناير- ٥فبراير',
+  //         url1: 'https://image.flaticon.com/icons/svg/747/747310.svg',
+  //         url:
+  //           'https://storage.sharek.sa/public/uploads/events/music-concert-super-junior-ar-1562161345-poster.png',
+  //         thumbnailUrl: 'https://via.placeholder.com/150/771796',
+  //       },
+  //       {
+  //         albumId: 1,
+  //         id: 3,
+  //         title: 'ونتر لاند',
+  //         time: '                            ٤ مارس - ٩ابريل',
+  //         url1: 'https://image.flaticon.com/icons/svg/747/747310.svg',
+  //         url:
+  //           'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT3VKXRBsmNCOLnV67X4Be_ZY4GFcKn6IWiajylhFF1v2HYBoTN',
+  //         thumbnailUrl: 'https://via.placeholder.com/150/24f355',
+  //       },
+  //       {
+  //         albumId: 1,
+  //         id: 4,
+  //         title: 'مهرجان الرعب',
+  //         time: '                ٧ فبراير - ١١ ابريل',
+  //         url1: 'https://image.flaticon.com/icons/svg/747/747310.svg',
+  //         url:
+  //           'https://images.akhbarelyom.com//images/images/medium/20191013155720344.jpg',
+  //         thumbnailUrl: 'https://via.placeholder.com/150/d32776',
+  //       },
+  //       {
+  //         albumId: 1,
+  //         id: 5,
+  //         title: 'معرض الاينمي السعودي',
+  //         time: '     ٢٥ اكتوبر - ١٨ مارس',
+  //         url1: 'https://image.flaticon.com/icons/svg/747/747310.svg',
+  //         url:
+  //           'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTtRMDIclFC0pN2Nddv9obOZeZAPyRvlUtrRpHCGA4O4KFyVEhu',
+  //         thumbnailUrl: 'https://via.placeholder.com/150/f66b97',
+  //       },
+  //     ],
+  //   };
   // }
+  // // componentDidMount() {
+  // //   this.getDataFromAPI();
+  // // }
 
-  // getDataFromAPI = async () => {
-  //   const endpoint = 'https://jsonplaceholder.typicode.com/photos?_limit=5';
-  //   const res = await fetch(endpoint);
-  //   const data = await res.json();
-  //   this.setState({items: data});
+  // // getDataFromAPI = async () => {
+  // //   const endpoint = 'https://jsonplaceholder.typicode.com/photos?_limit=5';
+  // //   const res = await fetch(endpoint);
+  // //   const data = await res.json();
+  // //   this.setState({items: data});
+  // // };
+
+  // _renderItem = ({item, index}) => {
+  //   let {cardText, card, cardImage} = styles;
+
+  //   return (
+  //     <TouchableOpacity style={card}>
+  //       <Image
+  //         style={cardImage}
+  //         source={{
+  //           uri: item.url,
+  //         }}></Image>
+  //       <Text style={cardText}>
+  //         {item.title}
+
+  //         {item.time}
+  //         {/* <Icon name="favorite" /> */}
+  //       </Text>
+  //     </TouchableOpacity>
+  //   );
   // };
-
-  _renderItem = ({item, index}) => {
-    let {cardText, card, cardImage} = styles;
-
-    return (
-      <TouchableOpacity style={card}>
-        <Image
-          style={cardImage}
-          source={{
-            uri: item.url,
-          }}></Image>
-        <Text style={cardText}>
-          {item.title}
-
-          {item.time}
-          {/* <Icon name="favorite" /> */}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
   render() {
-    let {container, loader} = styles;
-    let {items} = this.state;
-    if (items.length === 0) {
-      return (
-        <View style={loader}>
-          <ActivityIndicator size="large" />
-        </View>
-      );
-    }
+    // let {container, loader} = styles;
+    // let {items} = this.state;
+    // if (items.length === 0) {
+    //   return (
+    //     <View style={loader}>
+    //       <ActivityIndicator size="large" />
+    //     </View>
+    //   );
+    // }
     return (
       <>
         <TopNav />
-        <FlatList
+        {/* <Container style={styles.header}>
+          <Header hasSegment >
+            <Left>
+              <Button transparent>
+                <Icon name="arrow-back" />
+              </Button>
+            </Left>
+            <Body>
+              <Segment>
+                <Button first active>
+                  <Icon name="arrow-back" />
+                </Button>
+                <Button last>
+                  <Icon name="arrow-forward" />
+                </Button>
+              </Segment>
+            </Body>
+            <Right>
+              <Button transparent>
+                <Icon name="search" />
+              </Button>
+            </Right>
+          </Header>
+        </Container> */}
+        {/* <FlatList
           style={container}
           data={items}
           keyExtractor={(item, index) => index.toString()}
           renderItem={this._renderItem}
-        />
-        <BottomNav history={this.props.history}/>
+        /> */}
+        <View style={styles.content}></View>
+        <BottomNavRegUser history={this.props.history} />
       </>
     );
   }
@@ -130,6 +167,12 @@ export default class Browse extends Component {
 const styles = StyleSheet.create({
   container: {
     marginTop: 40,
+  },
+  header: {
+    backgroundColor: 'blue'
+  },
+  content: {
+    flex: 1,
   },
   cardText: {
     fontSize: 20,
