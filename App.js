@@ -1,12 +1,5 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
 
-import React from 'react';
+import React, {Component} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -32,13 +25,15 @@ import ContactUs from './components/ContactUs';
 import AddEvent from './components/AddEvent';
 import Browse from './components/Browse'
 import Favorite from './components/Favorite'
+import BottomNavRegUser from './components/BottomNavRegUser';
 
-const App: () => React$Node = () => {
-  return (
+export default class App extends Component {
+  render() {
+    return (
     <NativeRouter>
       <SafeAreaView style={styles.container}>
         <Switch>
-          <Route exact path="/" component={LandingPage} />
+          <Route exact path="/" component={AddEvent} />
           <Route exact path="/contactus" component={ContactUs} />
           <Route path="/signup" component={SignUp} />
           <Route path="/home" component={Browse} />
@@ -48,15 +43,13 @@ const App: () => React$Node = () => {
       </SafeAreaView>
     </NativeRouter>
   );
-};
+}};
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgb(32, 53, 70)",
+    backgroundColor: "#fff",
     flex: 1,
     alignItems: "center",
     justifyContent: "center"
   }
 });
-
-export default App;
