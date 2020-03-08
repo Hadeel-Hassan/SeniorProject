@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 // import Icon from 'react-native-vector-icons/FontAwesome';
 import {Text, StyleSheet, View} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faHome, faBars, faThLarge, faFilter} from '@fortawesome/free-solid-svg-icons';
+import {faHome, faBars, faThLarge, faFilter, faSearch} from '@fortawesome/free-solid-svg-icons';
 import {
   Container,
   Header,
@@ -50,7 +50,7 @@ export default class TopNav extends Component {
           </Body>
           <Right>
             <Button transparent>
-              <Icon name="search" />
+              <FontAwesomeIcon icon={ faSearch } color='white'/>
             </Button>
           </Right>
         </Header>
