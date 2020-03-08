@@ -23,12 +23,26 @@ import Input from './Input';
 import SignUp from './SignUp';
 import {faArrowAltCircleLeft} from '@fortawesome/free-solid-svg-icons';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
+
+import {login, signup} from '../firebase/config'
+
+
 export default class LandingPage extends Component {
+  state={
+    email: '',
+    password: '',
+  }
+
+  handleSignUp(){
+    if(this.state.email === '' || this.state.password === ''){
+    Alert.alert('خطأ في تسجيل الدخول', 'لم يتم إدخال كافة الحقول المطلوبة', [{text: 'إغلاق'}]);
+    }
+    else{
+      login(this.state.email, this.state.password);
+    }
+    
+  }
   render() {
-    // function skip() {
-    //   ;
-    //   // Alert.alert('Good', 'This worked!', [{text: 'close'}]);
-    // }
     return (
       <>
         <TouchableWithoutFeedback
@@ -50,7 +64,7 @@ export default class LandingPage extends Component {
                 keyboardType="email-address"
                 returnKeyType="next"
                 autoCorrect={false}
-                // onChangeText={onChangeText}
+                onChangeText={text => this.setState({email: text})}
               />
               <TextInput
                 style={styles.input}
@@ -59,12 +73,13 @@ export default class LandingPage extends Component {
                 returnKeyType="next"
                 autoCorrect={false}
                 secureTextEntry
-                // onChangeText={onChangeText}
+                onChangeText={text => this.setState({password: text})}
               />
               <Button
                 style={styles.signInBtn}
                 color="rgb(1, 106, 167)"
                 title="تسجيل الدخول"
+                onPress={(e) => this.handleSignUp()}
               />
               <View style={styles.newUserContainer}>
                 <Button

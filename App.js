@@ -26,6 +26,7 @@ import AddEvent from './components/AddEvent';
 import Browse from './components/Browse'
 import Favorite from './components/Favorite'
 import BottomNavRegUser from './components/BottomNavRegUser';
+import { signup } from './firebase/config';
 
 export default class App extends Component {
   render() {
@@ -33,7 +34,7 @@ export default class App extends Component {
     <NativeRouter>
       <SafeAreaView style={styles.container}>
         <Switch>
-          <Route exact path="/" component={AddEvent} />
+          <Route exact path="/" component={LandingPage} />
           <Route exact path="/contactus" component={ContactUs} />
           <Route path="/signup" component={SignUp} />
           <Route path="/home" component={Browse} />

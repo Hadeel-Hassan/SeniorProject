@@ -11,7 +11,6 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
-import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import {Form, Header, Body, Left, Button} from 'native-base';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
@@ -19,6 +18,7 @@ import {
   faTimes,
   faTimesCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button';
 import {faClock} from '@fortawesome/free-regular-svg-icons';
 import {Hoshi} from 'react-native-textinput-effects';
 import Input from './Input';
@@ -31,6 +31,9 @@ import DatePicker from 'react-native-datepicker';
 export default class AddEvent extends Component {
   state = {
     date: new Date(),
+    timeStart: new Date(),
+    timeEnd: new Date(),
+    radioValue: 1,
   };
   render() {
     // const [date, setDate] = useState(new Date());
@@ -128,7 +131,7 @@ export default class AddEvent extends Component {
                 <Text style={styles.timeText}>نهاية وقت الفعالية</Text>
                 <DatePicker
                   style={{width: 120}}
-                  date={this.state.date}
+                  date={this.state.timeEnd}
                   iconComponent={
                     <FontAwesomeIcon
                       icon={faClock}
@@ -155,7 +158,7 @@ export default class AddEvent extends Component {
                     // ... You can check the source to find the other keys.
                   }}
                   onDateChange={date => {
-                    this.setState({date: date});
+                    this.setState({timeEnd: date});
                   }}
                 />
               </View>
@@ -163,7 +166,7 @@ export default class AddEvent extends Component {
                 <Text style={styles.timeText}>بداية وقت الفعالية</Text>
                 <DatePicker
                   style={{width: 120}}
-                  date={this.state.date}
+                  date={this.state.timeStart}
                   iconComponent={
                     <FontAwesomeIcon
                       icon={faClock}
@@ -190,11 +193,60 @@ export default class AddEvent extends Component {
                     // ... You can check the source to find the other keys.
                   }}
                   onDateChange={date => {
-                    this.setState({date: date});
+                    this.setState({timeStart: date});
                   }}
                 />
               </View>
             </View>
+            <View style={styles.radio}>
+              <RadioGroup
+                onSelect={value => this.setState({radioValue: value})}
+                style={styles.radio}>
+                <RadioButton
+                  value={'yes'}
+                  style={{flexDirection: 'row-reverse'}}>
+                  <Text style={{alignSelf: 'center', marginHorizontal: 4}}>
+                    يشتمل على تذاكر
+                  </Text>
+                </RadioButton>
+                <RadioButton
+                  value={'yes'}
+                  style={{flexDirection: 'row-reverse'}}>
+                  <Text style={{alignSelf: 'center', marginHorizontal: 4}}>
+                    الحضور مجاني
+                  </Text>
+                </RadioButton>
+              </RadioGroup>
+            </View>
+            {this.state.radioValue === 0 ? (
+              <View>
+                <TextInput
+                  placeholder="سعر التذكرة للشخص البالغ"
+                  placeholderTextColor="darkgray"
+                  keyboardType="number-pad"
+                  style={{borderBottomColor: '#aaa', borderBottomWidth: 1}}
+                />
+                <TextInput
+                  placeholder="سعر التذكرة للطفل"
+                  placeholderTextColor="darkgray"
+                  keyboardType="number-pad"
+                  style={{borderBottomColor: '#aaa', borderBottomWidth: 1}}
+                />
+              </View>
+            ) : null}
+            <TextInput
+              placeholder="منظم الفعالية"
+              placeholderTextColor="darkgray"
+              keyboardType="default"
+              style={{borderBottomColor: '#aaa', borderBottomWidth: 1}}
+            />
+            <TextInput
+              placeholder="وصف الفعالية"
+              multiline
+              placeholderTextColor="darkgray"
+              keyboardType="default"
+              style={{borderBottomColor: '#aaa', borderBottomWidth: 1, height: 80}}
+            />
           </Form>
         </ScrollView>
         <BottomNavRegUser history={this.props.history} />
@@ -241,11 +293,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     alignSelf: 'center',
     color: 'rgb(123, 123, 123)',
-    marginVertical: 7
+    marginVertical: 7,
   },
   timeContainer: {
     display: 'flex',
     flexDirection: 'row',
     marginVertical: 15,
+  },
+  radio: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 });
