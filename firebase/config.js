@@ -44,7 +44,9 @@ export function signup(email, password) {
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(userInfo => {
-      Alert.alert('Good', 'This worked!', [{text: 'close'}]);
+   
+    Alert.alert('Good', 'This worked!', [{text: 'close'}]);
+
     });
 }
 
