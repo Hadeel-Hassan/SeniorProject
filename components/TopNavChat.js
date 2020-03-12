@@ -43,7 +43,7 @@ export default class TopNav extends Component {
         <Header hasSegment style={styles.header}>
           <Left>
            
-			<Button transparent onPress={() => this.props.history.push('/')}>
+			<Button transparent onPress={() => this.props.history.push('/home')}>
             <FontAwesomeIcon icon={faArrowLeft} size={25} color='white' style={styles.backbutton  }/>
 
             </Button>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   header: {
-    backgroundColor: '#A993DE',
+    backgroundColor: '#818F88',
   },
   icon: {
     marginHorizontal: 10,

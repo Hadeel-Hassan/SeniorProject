@@ -30,7 +30,6 @@ import Favorite from './components/Favorite';
 import BottomNavRegUser from './components/BottomNavRegUser';
 import { signup } from './firebase/config';
 import Chat from './components/Chat';
-
 export default class App extends Component {
   render() {
     return (

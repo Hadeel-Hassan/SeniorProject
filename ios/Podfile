@@ -38,6 +38,8 @@ target 'saudi_vibes' do
 
 
 
+  pod 'react-native-dialogflow', :path => '../node_modules/react-native-dialogflow'
+
   target 'saudi_vibesTests' do
     inherit! :search_paths
     # Pods for testing
