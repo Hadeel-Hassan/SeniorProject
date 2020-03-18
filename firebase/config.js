@@ -1,33 +1,60 @@
 import * as fb from 'firebase';
 import {Alert} from 'react-native';
+import 'firebase/firestore';
+import 'firebase/storage';
 
-// const firebase = null;
 const config = {
-  apiKey: 'AIzaSyBIOkC-FXOQWNkAInk05YpLI0iM9srmOKk',
-  authDomain: 'myfirstproject-91b71.firebaseapp.com',
-  databaseURL: 'https://myfirstproject-91b71.firebaseio.com',
-  projectId: 'myfirstproject-91b71',
-  storageBucket: 'myfirstproject-91b71.appspot.com',
-  messagingSenderId: '574817376017',
-  appId: '1:574817376017:web:2e8e11c5a92d820780deb0',
+  apiKey: 'AIzaSyAAWnkattEo93-hGgrsLwwv6zsznyj4kJI',
+  authDomain: 'saudivibes-701df.firebaseapp.com',
+  databaseURL: 'https://saudivibes-701df.firebaseio.com',
+  projectId: 'saudivibes-701df',
+  storageBucket: 'saudivibes-701df.appspot.com',
+  messagingSenderId: '960547540192',
+  appId: '1:960547540192:web:ca68e6f7f5dbaeedd99485',
+  measurementId: 'G-JMSYKB6F2X',
 };
 // if (!fb.apps.length) {
 const firebase = fb.initializeApp(config);
+const db = firebase.firestore();
+const storage = firebase.storage();
+let posters = [];
 
-// const storage = firebase.storage();
 
-// export function auth(){
-
-// }
-
-export function addEvent(event) {
-  firebase
-    .firestore()
-    .collection('events')
+export function _addEvent(event, poster, extension) {
+  var image = addPoster(poster,extension);
+  event.imageURL = image;
+  db.collection('events')
     .add(event)
     .then(data => {
-      Alert.alert('Good', 'This worked!', [{text: 'close'}]);
+      Alert.alert('Good', 'Your Event successfully added!', [{text: 'close'}]);
+    })
+    .catch(error => {
+      Alert.alert('Error', [{text: 'close'}]);
     });
+}
+
+function addPoster(poster, extension){
+  posterId = Math.random().toString(36).substr(2, 10);
+  storageRef = storage.ref(`eventsPosters/poster_${posterId}.${extension}`);
+  // var posterBlob = new Blob(poster, { type: "image/jpeg" });
+  // console.log(posterBlob.toString());
+  
+  putInStorage = storageRef.put(poster);
+  putInStorage.on(firebase.storage.TaskEvent.STATE_CHANGED,
+    (snapshot) => {
+      if (snapshot.state === firebase.storage.TaskState.SUCCESS){
+        Alert.alert('Success','Image was uploaded to storage!', [{text: 'close'}]);
+      }
+    },
+    (error) => {
+      unsubscribe();
+      Alert.alert('Error', "Image didn't upload! "+error.toString(), [{text: 'close'}]);
+    },
+    () => storageRef.getDownloadURL()
+    .then((downloadURL) => {
+      posters.push(downloadURL);
+      return downloadURL;
+    }))
 }
 
 export function login(email, password) {
@@ -44,9 +71,7 @@ export function signup(email, password) {
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(userInfo => {
-   
-    Alert.alert('Good', 'This worked!', [{text: 'close'}]);
-
+      Alert.alert('Good', 'This worked!', [{text: 'close'}]);
     });
 }
 

@@ -24,12 +24,18 @@ import {NativeRouter, Switch, Route} from 'react-router-native';
 import LandingPage from './components/LandingPage'
 import SignUp from './components/SignUp';
 import ContactUs from './components/ContactUs';
-import AddEvent from './components/AddEvent';
+import AddEventPage from './components/AddEventPage';
 import Browse from './components/Browse'
 import Favorite from './components/Favorite';
 import BottomNavRegUser from './components/BottomNavRegUser';
 import { signup } from './firebase/config';
 import Chat from './components/Chat';
+
+import {decode, encode} from 'base-64'
+
+if (!global.btoa) {  global.btoa = encode }
+if (!global.atob) { global.atob = decode }
+
 export default class App extends Component {
   render() {
     return (
@@ -37,11 +43,11 @@ export default class App extends Component {
       <SafeAreaView style={styles.container}>
 
         <Switch>
-          <Route exact path="/" component={LandingPage} />
+          <Route exact path="/" component={AddEventPage} />
           <Route exact path="/contactus" component={ContactUs} />
           <Route path="/signup" component={SignUp} />
           <Route path="/home" component={Browse} />
-          <Route path="/add" component={AddEvent} />
+          <Route path="/add" component={AddEventPage} />
           <Route path="/fav" component={Favorite} />
           <Route path="/chat" component={Chat} />
         </Switch>
