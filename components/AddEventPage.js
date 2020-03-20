@@ -30,7 +30,7 @@ import {Dropdown} from 'react-native-material-dropdown';
 // import Date from './Date'
 import DatePicker from 'react-native-datepicker';
 import ImagePicker from 'react-native-image-picker';
-import {_addEvent} from '../firebase/config' 
+import {_addEvent} from '../firebase/config';
 
 export default class AddEventPage extends Component {
   state = {
@@ -49,6 +49,7 @@ export default class AddEventPage extends Component {
     eventOrganizer: '',
     eventDescription: '',
     eventPoster: '',
+    previewImage: null,
     posterImage: null,
     posterExtension: '',
     status: 'pending',
@@ -57,18 +58,13 @@ export default class AddEventPage extends Component {
   options = {
     title: 'اختر صورة الفعالية',
     chooseFromLibraryButtonTitle: 'اختر من الاستديو',
-    takePhotoButtonTitle: 'التقط صورة'
+    takePhotoButtonTitle: 'التقط صورة',
   };
 
   chooseImage() {
     ImagePicker.showImagePicker(this.options, response => {
-      let source = { uri: response.uri};
-      const res = fetch(response.uri);
-      this.setState({
-        posterImage: source,
-        blobImage: res.blob(),
-        posterExtension: response.uri.split('.').pop(),
-      });
+      let source = {uri: response.uri};
+      this.setState({posterImage: response.path, previewImage: source});
     });
     // this.renderImage();
   }
@@ -76,31 +72,58 @@ export default class AddEventPage extends Component {
   renderImage() {
     return (
       <View>
-        <Image source={this.state.posterImage} style={styles.posterImages} />
+        <Image source={this.state.previewImage} style={styles.posterImages} />
       </View>
     );
   }
 
-  handleForm() {
-    var formData = {
-      name: this.state.eventName,
-      event_type: this.state.eventType,
-      age_group: this.state.ageGroup,
-      city: this.state.city,
-      date: this.state.date,
-      start_time: this.state.timeStart,
-      end_time: this.state.timeEnd,
-      free: this.state.free,
-      adult_price: this.state.adultTicket,
-      kid_price: this.state.kidTicket,
-      location: this.state.eventLocation,
-      organizer: this.state.eventOrganizer,
-      description: this.state.eventDescription,
-      eventStatus: this.state.status,
-    };
-    _addEvent(formData, this.state.posterImage, this.state.posterExtension); 
-  } 
-  // chooseImage() { 
+  upload() {
+    console.log('inside upload');
+
+    this.handleForm(this.state.posterImage);
+      // .then(url => {
+      //   this.setState({posterImage: url});
+      //   console.log('after handleForm');
+      // })
+      // .catch(error => {
+      //   Alert.alert('Error', 'In handleForm', [{text: 'close'}]);
+      // });
+  }
+
+  handleForm = async (uri) => {
+    const res = await fetch(uri)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(er => {
+        console.log(er);
+      });
+    // const blob = await res.blob();
+    // var formData = {
+    //   name: this.state.eventName,
+    //   event_type: this.state.eventType,
+    //   age_group: this.state.ageGroup,
+    //   city: this.state.city,
+    //   date: this.state.date,
+    //   start_time: this.state.timeStart,
+    //   end_time: this.state.timeEnd,
+    //   free: this.state.free,
+    //   adult_price: this.state.adultTicket,
+    //   kid_price: this.state.kidTicket,
+    //   location: this.state.eventLocation,
+    //   organizer: this.state.eventOrganizer,
+    //   description: this.state.eventDescription,
+    //   eventStatus: this.state.status,
+    // }
+    // _addEvent(blob)
+    // .then(() => {
+    //   Alert.alert('Success', 'Image was uploaded to storage!', [{text: 'close'}]);
+    // })
+    // .catch((error) => {
+    //   Alert.alert('Error', "Image didn't upload! ", [{text: 'close'}]);
+    // })
+  }
+  // chooseImage() {
   //   ImagePicker.showImagePicker(this.options, response => {
   //     let source = {uri: response.uri};
   //     this.setState({
@@ -452,20 +475,27 @@ export default class AddEventPage extends Component {
               </TouchableOpacity>
               <View style={styles.imageContainer}>
                 <Image
-                  source={this.state.posterImage}
+                  source={this.state.previewImage}
                   style={styles.posterImages}
                 />
+
                 {/* <Text>{this.state.posterImage.toString()}</Text> */}
-              </View> 
+              </View>
               {/* <FlatList
                   data={this.state.images}
                   renderItem={() => Object.values(this.renderItem).map}
                   keyExtractor={(item, index) => index.toString()}
-                /> */} 
+                /> */}
               {/* </Root> */}
-              <Button style={styles.sendBtn} onPress={() => this.handleForm()}>
+              <Button style={styles.sendBtn} onPress={() => this.upload()}>
                 <Text style={styles.sendTxt}>إرسال</Text>
               </Button>
+
+              {/* <Image
+                source={this.state.posterImage}
+                style={styles.posterImages}
+              /> */}
+              <Text>{this.state.posterImage}</Text>
             </Form>
           </ScrollView>
         </React.Fragment>
@@ -536,7 +566,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   imageContainer: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   posterImages: {
     height: 100,

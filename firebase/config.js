@@ -1,7 +1,9 @@
 import * as fb from 'firebase';
-import {Alert} from 'react-native';
+import {Alert, Platform} from 'react-native';
 import 'firebase/firestore';
 import 'firebase/storage';
+import RNFetchBlob from 'rn-fetch-blob'
+
 
 const config = {
   apiKey: 'AIzaSyAAWnkattEo93-hGgrsLwwv6zsznyj4kJI',
@@ -18,44 +20,118 @@ const firebase = fb.initializeApp(config);
 const db = firebase.firestore();
 const storage = firebase.storage();
 let posters = [];
+// const Blob = RNFetchBlob.polyfill.Blob;
+// const fs = RNFetchBlob.fs;
+// window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
+// window.Blob = Blob;
 
-
-export function _addEvent(event, poster, extension) {
-  var image = addPoster(poster,extension);
-  event.imageURL = image;
-  db.collection('events')
-    .add(event)
-    .then(data => {
-      Alert.alert('Good', 'Your Event successfully added!', [{text: 'close'}]);
-    })
-    .catch(error => {
-      Alert.alert('Error', [{text: 'close'}]);
-    });
-}
-
-function addPoster(poster, extension){
-  posterId = Math.random().toString(36).substr(2, 10);
-  storageRef = storage.ref(`eventsPosters/poster_${posterId}.${extension}`);
-  // var posterBlob = new Blob(poster, { type: "image/jpeg" });
-  // console.log(posterBlob.toString());
+export function _addEvent(poster) {
+  //mime = 'application/octet-stream'
+  console.log("Enter Function");
   
-  putInStorage = storageRef.put(poster);
-  putInStorage.on(firebase.storage.TaskEvent.STATE_CHANGED,
-    (snapshot) => {
-      if (snapshot.state === firebase.storage.TaskState.SUCCESS){
-        Alert.alert('Success','Image was uploaded to storage!', [{text: 'close'}]);
-      }
-    },
-    (error) => {
-      unsubscribe();
-      Alert.alert('Error', "Image didn't upload! "+error.toString(), [{text: 'close'}]);
-    },
-    () => storageRef.getDownloadURL()
-    .then((downloadURL) => {
-      posters.push(downloadURL);
-      return downloadURL;
-    }))
+  const posterId = Math.random()
+    .toString(36)
+    .substr(2, 10);
+  const posterName = `poster_${posterId.toString()}`;
+  const storageRef = storage.ref().child(`eventsPosters/${posterName.toString()}`);
+  console.log("Before put");
+  // console.log(storageRef);
+  
+  return storageRef.put(poster);
+  // .then((uploaded) => {
+  //   console.log("inside put");
+  //   Alert.alert('Success', 'Image was uploaded to storage!', [{text: 'close'}]);
+  //   storageRef.getDownloadURL().then(url => {
+  //     console.log(url.toString());
+  //   })
+  //   .catch((error) => {
+  //     Alert.alert('Error', "Can't get url", [{text: 'close'}]);
+  //   // console.log(error);
+  //   });
+  // })
+  // .catch((error) => {
+  //   Alert.alert('Error', "Form didn't upload! ", [{text: 'close'}]);
+  //   console.log(error.message);
+  // });
+
 }
+
+/*
+return new Promise((res, rej) => {
+    const uploadUri = poster;
+    const posterId = Math.random()
+      .toString(36)
+      .substr(2, 10);
+    let uploadBlob = null;
+    const posterName = `poster_${posterId}`;
+    const storageRef = storage.ref('eventsPosters').child(posterName);
+    console.log('before read');
+
+    fs.readFile(uploadUri, 'base64')
+      .then(data => {
+        // console.log(mime);
+        Blob.build(data, {type: `${mime};BASE64`});
+        console.log('after build');
+      })
+      .then(blob => {
+        uploadBlob = blob;
+        console.log(poster);
+        // storageRef.putString(poster,'base64', {contentType:'image/jpg'});
+        return storageRef.put(blob, {contentType: mime});
+        // storageRef.put(new File(poster, posterName, {contentType:'image/jpg'}))
+        // console.log("after put");
+      })
+      .then(() => {
+        uploadBlob.close();
+        console.log('after closing blob');
+        return storageRef.getDownloadURL();
+        // console.log("after get url");
+      })
+      .then(url => {
+        Alert.alert('Success', 'Image was uploaded to storage!', [
+          {text: 'close'},
+        ]);
+        event.imageURL = url;
+        db.collection('events')
+          .add(event)
+          .then(data => {
+            Alert.alert('Good', 'Your Event successfully added!', [
+              {text: 'close'},
+            ]);
+          })
+          .catch(error => {
+            Alert.alert('Error', "Form didn't upload! ", [{text: 'close'}]);
+          });
+        res(url);
+        posters.push(url);
+      })
+      .catch(error => {
+        Alert.alert('Error', "Image didn't upload! ", [{text: 'close'}]);
+        console.log(error);
+      });
+*/
+
+//=================================================================================================//
+
+// var posterBlob = new Blob(poster, { type: "image/jpeg" });
+// console.log(posterBlob.toString());
+
+// putInStorage = storageRef.put(poster);
+// putInStorage.on(firebase.storage.TaskEvent.STATE_CHANGED,
+//   (snapshot) => {
+//     if (snapshot.state === firebase.storage.TaskState.SUCCESS){
+//       Alert.alert('Success','Image was uploaded to storage!', [{text: 'close'}]);
+//     }
+//   },
+//   (error) => {
+//     unsubscribe();
+//     Alert.alert('Error', "Image didn't upload! "+error.toString(), [{text: 'close'}]);
+//   },
+//   () => storageRef.getDownloadURL()
+//   .then((downloadURL) => {
+//     posters.push(downloadURL);
+//     return downloadURL;
+//   }))
 
 export function login(email, password) {
   firebase
@@ -66,11 +142,12 @@ export function login(email, password) {
     });
 }
 
-export function signup(email, password) {
+export function signup(email, password, username) {
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(userInfo => {
+      console.log(userInfo);
       Alert.alert('Good', 'This worked!', [{text: 'close'}]);
     });
 }

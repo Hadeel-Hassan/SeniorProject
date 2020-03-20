@@ -95,3 +95,7 @@ const styles = StyleSheet.create({
     marginLeft: 50
   },
 });
+
+export function fun(){
+  
+}
