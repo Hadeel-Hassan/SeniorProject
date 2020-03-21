@@ -68,7 +68,6 @@ export default class BottomNav extends Component {
               {/* <Text>تصفح الفعاليات</Text> */}
             </Button>
             <Button onPress={() => this.props.history.push('/fav')}>
-              {/* <Icon name="heart" /> */}
               <FontAwesomeIcon icon={faHeart} color="white" size={23} />
               {/* <Text>المفضلة</Text> */}
             </Button>
@@ -76,7 +75,7 @@ export default class BottomNav extends Component {
               <FontAwesomeIcon icon={faCommentDots} color="white" size={23} />
               {/* <Text>تحدث مع ميلارا</Text> */}
             </Button>
-            <Button onPress={() => this.props.history.push('/profile')}>
+            <Button onPress={() => this.props.history.push('/prof')}>
               {/* <Icon name="person" /> */}
               <FontAwesomeIcon icon={faUser} color="white" size={23} />
               {/* <Text>الملف الشخصي</Text> */}

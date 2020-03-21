@@ -11,9 +11,10 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/free-brands-svg-icons": "^5.12.1",
     "@fortawesome/free-regular-svg-icons": "^5.12.1",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
-    "@fortawesome/react-native-fontawesome": "^0.2.2",
+    "@fortawesome/react-native-fontawesome": "^0.2.3",
     "@ionic/react": "^5.0.2",
     "@material-ui/core": "^4.9.4",
     "@material-ui/icons": "^4.9.1",

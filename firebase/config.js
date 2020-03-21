@@ -35,7 +35,7 @@ export function login(email, password) {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(value => {
-      Alert.alert('Good', 'This worked!', [{text: 'close'}]);
+
     });
 }
 
@@ -44,12 +44,21 @@ export function signup(email, password) {
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(userInfo => {
-      Alert.alert('Good', 'This worked!', [{text: 'close'}]);
+      Alert.alert('Good', 'تم انشاء حسابك بنجاح!', [{text: 'close'}]);
     });
 }
 
 export function signout() {
-  firebase.signout().then(() => {
-    Alert.alert('Good', 'This worked!', [{text: 'close'}]);
+  firebase.auth().signOut().then(() => {
+    return '1';
   });
 }
+
+export function profile() {
+  return firebase.auth().currentUser.email;
+}
+
+export function passwordReset(email) {
+  return firebase.auth().sendPasswordResetEmail(email)
+}
+

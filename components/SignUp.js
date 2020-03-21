@@ -36,6 +36,7 @@ export default class SignUp extends Component {
     } else {
       signup(this.state.email, this.state.password);
     }
+
   }
   render() {
     return (

@@ -42,6 +42,8 @@ export default class LandingPage extends Component {
     }
     
   }
+  
+
   render() {
     return (
       <>
@@ -79,7 +81,13 @@ export default class LandingPage extends Component {
                 style={styles.signInBtn}
                 color="rgb(1, 106, 167)"
                 title="تسجيل الدخول"
-                onPress={(e) => this.handleSignUp()}
+                onPress={(e) => {this.handleSignUp();this.props.history.push('/home')}}
+              />
+              <Button
+                style={styles.signInBtn}
+                color="rgb(1, 106, 167)"
+                title="نسيت كلمة السر؟"
+                onPress={() => this.props.history.push('/forget')}
               />
               <View style={styles.newUserContainer}>
                 <Button
