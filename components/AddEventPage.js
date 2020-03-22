@@ -467,14 +467,15 @@ export default class AddEventPage extends Component {
                 <TextInput
                   editable={false}
                   placeholder="اختر صورة..."
-                  placeholderTextColor="darkgray"
+                  placeholderTextColor="white"
                   keyboardType="default"
                   style={{
                     borderBottomColor: '#ccc',
                     borderBottomWidth: 1,
-                    paddingHorizontal: 50,
+                    paddingHorizontal: 40,
+                    borderRadius: 6,
                     paddingVertical: 6,
-                    backgroundColor: '#ddd',
+                    backgroundColor: '#238ECA',
                   }}
                 />
                 <Text style={styles.dateText}>اختر صورة الفعالية</Text>
@@ -553,6 +554,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     marginHorizontal: 8,
+    marginLeft: 30,
     alignSelf: 'center',
     color: 'rgb(123, 123, 123)',
   },
