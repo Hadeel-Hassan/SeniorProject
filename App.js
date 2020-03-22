@@ -30,29 +30,33 @@ import Favorite from './components/Favorite';
 import BottomNavRegUser from './components/BottomNavRegUser';
 import { signup } from './firebase/config';
 import Chat from './components/Chat';
-
-import {decode, encode} from 'base-64'
-
-if (!global.btoa) {  global.btoa = encode }
-if (!global.atob) { global.atob = decode }
+import EventOwner from './components/EventOwner';
+import {getCurrentUser, getCurrentUserEmail} from './firebase/config';
 
 export default class App extends Component {
   render() {
     return (
     <NativeRouter>
       <SafeAreaView style={styles.container}>
-
-        <Switch>
-          <Route exact path="/" component={AddEventPage} />
-          <Route exact path="/contactus" component={ContactUs} />
-          <Route path="/signup" component={SignUp} />
-          <Route path="/home" component={Browse} />
-          <Route path="/add" component={AddEventPage} />
-          <Route path="/fav" component={Favorite} />
-          <Route path="/chat" component={Chat} />
-        </Switch>
-
-      </SafeAreaView>
+          <Switch>
+            
+            <Route exact path="/" component={EventOwner} />
+            <Route exact path="/contactus" component={ContactUs} />
+            <Route path="/signup" component={SignUp} />
+            {getCurrentUser()? (
+              getCurrentUserEmail() === 'hadeel.has97@gmail.com' ? (
+                <Route path="/home" component={EventOwner} />
+              ) : (
+                <Route path="/home" component={EventOwner} />
+              )
+            ) : (
+              <Route path="/home" component={Browse} />
+            )}
+            <Route path="/add" component={AddEventPage} />
+            <Route path="/fav" component={Favorite} />
+            <Route path="/chat" component={Chat} />
+          </Switch>
+        </SafeAreaView>
     </NativeRouter>
   );
 }};

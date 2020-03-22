@@ -2,8 +2,7 @@ import * as fb from 'firebase';
 import {Alert, Platform} from 'react-native';
 import 'firebase/firestore';
 import 'firebase/storage';
-import RNFetchBlob from 'rn-fetch-blob'
-
+import RNFetchBlob from 'rn-fetch-blob';
 
 const config = {
   apiKey: 'AIzaSyAAWnkattEo93-hGgrsLwwv6zsznyj4kJI',
@@ -25,19 +24,26 @@ let posters = [];
 // window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
 // window.Blob = Blob;
 
-export function _addEvent(poster) {
+export function _addEvent(event) {
   //mime = 'application/octet-stream'
-  console.log("Enter Function");
-  
-  const posterId = Math.random()
-    .toString(36)
-    .substr(2, 10);
-  const posterName = `poster_${posterId.toString()}`;
-  const storageRef = storage.ref().child(`eventsPosters/${posterName.toString()}`);
-  console.log("Before put");
-  // console.log(storageRef);
-  
-  return storageRef.put(poster);
+  // console.log("Enter Function");
+  db.collection('events')
+    .add(event)
+    .then(data => {
+      Alert.alert('Good', 'Your Event successfully added!', [{text: 'close'}]);
+    })
+    .catch(error => {
+      Alert.alert('Error', "Form didn't upload! ", [{text: 'close'}]);
+    });
+  // const posterId = Math.random()
+  //   .toString(36)
+  //   .substr(2, 10);
+  // const posterName = `poster_${posterId.toString()}`;
+  // const storageRef = storage.ref().child(`eventsPosters/${posterName.toString()}`);
+  // console.log("Before put");
+  // // console.log(storageRef);
+
+  // return storageRef.put(poster);
   // .then((uploaded) => {
   //   console.log("inside put");
   //   Alert.alert('Success', 'Image was uploaded to storage!', [{text: 'close'}]);
@@ -53,7 +59,6 @@ export function _addEvent(poster) {
   //   Alert.alert('Error', "Form didn't upload! ", [{text: 'close'}]);
   //   console.log(error.message);
   // });
-
 }
 
 /*
@@ -157,3 +162,12 @@ export function signout() {
     Alert.alert('Good', 'This worked!', [{text: 'close'}]);
   });
 }
+
+export function getCurrentUserEmail() {
+  return firebase.auth().currentUser.email;
+}
+
+export function getCurrentUser() {
+  return firebase.auth().currentUser;
+}
+

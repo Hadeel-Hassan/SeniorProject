@@ -5,6 +5,7 @@ import {
   View,
   Text,
   Image,
+  Alert,
   Picker,
   ActionSheetIOS,
   DocumentPicker,
@@ -31,6 +32,7 @@ import {Dropdown} from 'react-native-material-dropdown';
 import DatePicker from 'react-native-datepicker';
 import ImagePicker from 'react-native-image-picker';
 import {_addEvent} from '../firebase/config';
+import axios from 'axios';
 
 export default class AddEventPage extends Component {
   state = {
@@ -81,48 +83,52 @@ export default class AddEventPage extends Component {
     console.log('inside upload');
 
     this.handleForm(this.state.posterImage);
-      // .then(url => {
-      //   this.setState({posterImage: url});
-      //   console.log('after handleForm');
-      // })
-      // .catch(error => {
-      //   Alert.alert('Error', 'In handleForm', [{text: 'close'}]);
-      // });
+    // .then(url => {
+    //   this.setState({posterImage: url});
+    //   console.log('after handleForm');
+    // })
+    // .catch(error => {
+    //   Alert.alert('Error', 'In handleForm', [{text: 'close'}]);
+    // });
   }
 
-  handleForm = async (uri) => {
-    const res = await fetch(uri)
-      .then(res => {
-        console.log(res);
-      })
-      .catch(er => {
-        console.log(er);
-      });
+  handleForm = async uri => {
+    // axios
+    //   .put(
+    //     'https://us-central1-saudivibes-701df.cloudfunctions.net/storeImage',
+    //     {
+    //       image: this.state.posterImage,
+    //     },
+    //   ).then(res => {
+    //     console.log(res);
+    //   }).catch(err => {
+    //     console.log(err);
+    //   });
     // const blob = await res.blob();
-    // var formData = {
-    //   name: this.state.eventName,
-    //   event_type: this.state.eventType,
-    //   age_group: this.state.ageGroup,
-    //   city: this.state.city,
-    //   date: this.state.date,
-    //   start_time: this.state.timeStart,
-    //   end_time: this.state.timeEnd,
-    //   free: this.state.free,
-    //   adult_price: this.state.adultTicket,
-    //   kid_price: this.state.kidTicket,
-    //   location: this.state.eventLocation,
-    //   organizer: this.state.eventOrganizer,
-    //   description: this.state.eventDescription,
-    //   eventStatus: this.state.status,
-    // }
-    // _addEvent(blob)
+    var formData = {
+      name: this.state.eventName,
+      event_type: this.state.eventType,
+      age_group: this.state.ageGroup,
+      city: this.state.city,
+      date: this.state.date,
+      start_time: this.state.timeStart,
+      end_time: this.state.timeEnd,
+      free: this.state.free,
+      adult_price: this.state.adultTicket,
+      kid_price: this.state.kidTicket,
+      location: this.state.eventLocation,
+      organizer: this.state.eventOrganizer,
+      description: this.state.eventDescription,
+      eventStatus: this.state.status,
+    }
+    _addEvent(formData);
     // .then(() => {
     //   Alert.alert('Success', 'Image was uploaded to storage!', [{text: 'close'}]);
     // })
     // .catch((error) => {
     //   Alert.alert('Error', "Image didn't upload! ", [{text: 'close'}]);
     // })
-  }
+  };
   // chooseImage() {
   //   ImagePicker.showImagePicker(this.options, response => {
   //     let source = {uri: response.uri};
