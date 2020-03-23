@@ -148,11 +148,16 @@ export function login(email, password) {
     });
 }
 
-export function signup(email, password, username) {
+export function signup(email, password, username, avatar) {
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then(userInfo => {
+      var user = firebase.auth().currentUser;
+      user.updateProfile({
+        displayName: username,
+        photoURL: avatar,
+      })
       console.log(userInfo);
       Alert.alert('Good', 'This worked!', [{text: 'close'}]);
     });

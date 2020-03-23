@@ -45,7 +45,7 @@ export default class App extends Component {
     <NativeRouter>
       <SafeAreaView style={styles.container}>
           <Switch>
-            <Route exact path="/" component={Browse} />
+            <Route exact path="/" component={LandingPage} />
             <Route exact path="/contactus" component={ContactUs} />
             <Route path="/signup" component={SignUp} />
             {getCurrentUser()? (
