@@ -33,14 +33,19 @@ import Chat from './components/Chat';
 import EventOwner from './components/EventOwner';
 import {getCurrentUser, getCurrentUserEmail} from './firebase/config';
 
+import {decode, encode} from 'base-64'
+import BrowseGrid from './components/BrowseGrid';
+
+if (!global.btoa) {  global.btoa = encode }
+if (!global.atob) { global.atob = decode }
+
 export default class App extends Component {
   render() {
     return (
     <NativeRouter>
       <SafeAreaView style={styles.container}>
           <Switch>
-            
-            <Route exact path="/" component={EventOwner} />
+            <Route exact path="/" component={Browse} />
             <Route exact path="/contactus" component={ContactUs} />
             <Route path="/signup" component={SignUp} />
             {getCurrentUser()? (
@@ -55,6 +60,7 @@ export default class App extends Component {
             <Route path="/add" component={AddEventPage} />
             <Route path="/fav" component={Favorite} />
             <Route path="/chat" component={Chat} />
+            <Route path="/grid" component={BrowseGrid} />
           </Switch>
         </SafeAreaView>
     </NativeRouter>

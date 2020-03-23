@@ -20,7 +20,7 @@ import {
   Content,
 } from 'native-base';
 
-export default class TopNav extends Component {
+export default class TopNavGrid extends Component {
   render() {
     return (
       // <Header backgroundColor="rgb(21, 34, 44)">
@@ -55,15 +55,16 @@ export default class TopNav extends Component {
           </Right>
         </Header>
         <Segment style={styles.headerContainerS}>
-          <Button first active>
+          <Button first >
             <FontAwesomeIcon
               icon={faBars}
               color="black"
               size={25}
               style={styles.icon}
+              onPress={()=> {this.props.history.push('/home')}}
             />
           </Button>
-          <Button last onPress={()=> {this.props.history.push('/grid')}}>
+          <Button last active >
             <FontAwesomeIcon
               icon={faThLarge}
               color="black"

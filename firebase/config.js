@@ -16,9 +16,10 @@ const config = {
 };
 // if (!fb.apps.length) {
 const firebase = fb.initializeApp(config);
-const db = firebase.firestore();
+export const db = firebase.firestore();
 const storage = firebase.storage();
 let posters = [];
+var data = [{}];
 // const Blob = RNFetchBlob.polyfill.Blob;
 // const fs = RNFetchBlob.fs;
 // window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
@@ -171,3 +172,33 @@ export function getCurrentUser() {
   return firebase.auth().currentUser;
 }
 
+export function g(){
+  return db.collection('events').where('eventStatus', '==', 'accepted');
+}
+export function getAllData() {
+  db.collection('events')
+    .where('eventStatus', '==', 'accepted')
+    .get()
+    .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+        // doc.data() is never undefined for query doc snapshots
+        // console.log(doc.id, ' => ', doc.data());
+        // console.log(data);
+        
+        // data.push(JSON.stringify(doc.data()));
+        // console.log("hi");
+        
+        // console.log("func= ", data);
+        
+      });
+    })
+    .catch(function(error) {
+      console.log('Error getting documents: ', error);
+    });
+}
+
+export {data};
+
+function getD(d) {
+  return d;
+}

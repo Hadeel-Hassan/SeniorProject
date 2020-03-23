@@ -37,16 +37,14 @@ import {
 import {faUsers} from '@fortawesome/free-solid-svg-icons';
 // import { SafeAreaView } from 'react-navigation';
 import {db} from '../firebase/config';
+import TopNavGrid from './TopNavGrid';
 // import Icon from 'react-native-vector-icons';
 
-export default class Browse extends Component {
+export default class BrowseGrid extends Component {
   state = {
     items: [],
   };
 
-  c() {
-    getAllData();
-  }
   //   };
   // }
   // componentDidMount() {
@@ -106,24 +104,19 @@ export default class Browse extends Component {
           {/* <Icon name="favorite" /> 
         </Text>
         <Text style={styles.cardDate}>{item.time}</Text> */}
-        <Card style={{marginBottom: 20, width: 328, borderRadius: 10}}>
-          <CardItem>
+        <Card style={{marginBottom: 20, width: 170, borderRadius: 10}}>
+          <CardItem style={{height: 70}}>
             <Left>
-              <Body style={{flex: 1, flexDirection: 'row', marginLeft: -6}}>
-                <FontAwesomeIcon
-                  icon={faHeart}
-                  size={16}
-                  color="#aaa"
-                  style={{top: 2}}
-                />
-                <Text
-                  style={{
-                    color: '#bbb',
-                    alignSelf: 'flex-start',
-                    marginLeft: 15,
-                  }}>
+              <Body>
+                <Text style={{color: '#bbb', alignSelf: 'flex-start', left: -18, top: 23}}>
                   {item.event_type}
                 </Text>
+                <FontAwesomeIcon
+                icon={faHeart}
+                size={16}
+                color="#aaa"
+                style={{marginLeft: -16, top: -22}}
+              />
               </Body>
             </Left>
             <Right>
@@ -143,10 +136,10 @@ export default class Browse extends Component {
               {/* <Button > */}
               <Text
                 style={{
-                  marginLeft: 6,
-                  fontSize: 12,
+                  marginLeft: -9,
+                  fontSize: 11,
                   alignSelf: 'center',
-                  marginRight: 4,
+                  marginRight: 3,
                 }}>
                 {item.age_group}
               </Text>
@@ -159,33 +152,23 @@ export default class Browse extends Component {
 
               {/* </Button> */}
             </Left>
-            <Body style={{flex: 1, flexDirection: 'row', marginLeft: 25}}>
-              {/* <Button > */}
-
+            {/* <Body style={{flex: 1, flexDirection: 'row', marginLeft: 25}}>
+              
+              <Text style={{marginLeft: -30, marginRight: 4, fontSize: 12, alignSelf: 'center'}}>{item.date.replace(/-/g, "/")}</Text>
+              <FontAwesomeIcon icon={faCalendarAlt} size={16} color="#aaa" />
+            
+            </Body> */}
+            <Right style={{flex: 1, flexDirection: 'row', marginRight: -55}}>
               <Text
                 style={{
                   marginLeft: -30,
                   marginRight: 4,
-                  fontSize: 12,
+                  fontSize: 11,
                   alignSelf: 'center',
                 }}>
                 {item.date.replace(/-/g, '/')}
               </Text>
               <FontAwesomeIcon icon={faCalendarAlt} size={16} color="#aaa" />
-              {/* </Button> */}
-            </Body>
-            <Right style={{flex: 1, flexDirection: 'row', marginRight: -20}}>
-              <Text
-                style={{
-                  marginLeft: -30,
-                  fontSize: 12,
-                  alignSelf: 'center',
-                  marginRight: 4,
-                }}>
-                {item.end_time.replace(' :', '')}-
-                {item.start_time.replace(' :', '')}
-              </Text>
-              <FontAwesomeIcon icon={faClock} size={16} color="#aaa" />
             </Right>
           </CardItem>
         </Card>
@@ -205,11 +188,11 @@ export default class Browse extends Component {
     }
     return (
       <>
-        <TopNav history={this.props.history} />
+        <TopNavGrid history={this.props.history} />
         <View style={styles.content}>
           <SafeAreaView>
             <FlatList
-              // numColumns={3}
+              numColumns={2}
               style={container}
               data={this.state.items}
               keyExtractor={(item, index) => index.toString()}
@@ -236,8 +219,9 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    position: 'relative',
-    width: '95%',
+    // position: 'relative',
+    // marginHorizontal: 10,
+    // width: 340,
     // zIndex: -1,
     marginTop: -380,
   },
@@ -259,10 +243,13 @@ const styles = StyleSheet.create({
   card: {
     // backgroundColor: '#69BBE8',
     // borderRadius: 20,
-    marginBottom: 10,
-    marginLeft: '2%',
-    width: '100%',
-    height: 260,
+    // flexDirection: 'row',
+    // flex: 1,
+    // marginBottom: 10,
+    // marginLeft: '2%',
+    // width: 180,
+    // width: 50,
+    // height: 180,
     shadowColor: '#000',
     shadowOpacity: 1,
     shadowOffset: {
