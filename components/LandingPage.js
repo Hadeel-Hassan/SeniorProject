@@ -39,6 +39,7 @@ export default class LandingPage extends Component {
     }
     else{
       login(this.state.email, this.state.password);
+      this.props.history.push("/home")
     }
     
   }

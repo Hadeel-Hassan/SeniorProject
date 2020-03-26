@@ -82,6 +82,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   footer: {
-    backgroundColor: 'rgb(1, 106, 167)',
+    backgroundColor: '#fd7066',
   },
 });

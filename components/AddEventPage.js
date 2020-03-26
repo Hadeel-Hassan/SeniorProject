@@ -51,10 +51,11 @@ export default class AddEventPage extends Component {
     eventOrganizer: '',
     eventDescription: '',
     eventPoster: '',
-    previewImage: null,
+    previewImage: '',
     posterImage: null,
     posterExtension: '',
     status: 'pending',
+    done: false
   };
 
   options = {
@@ -68,7 +69,6 @@ export default class AddEventPage extends Component {
       let source = {uri: response.uri};
       this.setState({posterImage: response.path, previewImage: source});
     });
-    // this.renderImage();
   }
 
   renderImage() {
@@ -79,32 +79,7 @@ export default class AddEventPage extends Component {
     );
   }
 
-  upload() {
-    console.log('inside upload');
-
-    this.handleForm(this.state.posterImage);
-    // .then(url => {
-    //   this.setState({posterImage: url});
-    //   console.log('after handleForm');
-    // })
-    // .catch(error => {
-    //   Alert.alert('Error', 'In handleForm', [{text: 'close'}]);
-    // });
-  }
-
-  handleForm = async uri => {
-    // axios
-    //   .put(
-    //     'https://us-central1-saudivibes-701df.cloudfunctions.net/storeImage',
-    //     {
-    //       image: this.state.posterImage,
-    //     },
-    //   ).then(res => {
-    //     console.log(res);
-    //   }).catch(err => {
-    //     console.log(err);
-    //   });
-    // const blob = await res.blob();
+  handleForm() {
     var formData = {
       name: this.state.eventName,
       event_type: this.state.eventType,
@@ -120,94 +95,11 @@ export default class AddEventPage extends Component {
       organizer: this.state.eventOrganizer,
       description: this.state.eventDescription,
       eventStatus: this.state.status,
-    }
-    _addEvent(formData);
-    // .then(() => {
-    //   Alert.alert('Success', 'Image was uploaded to storage!', [{text: 'close'}]);
-    // })
-    // .catch((error) => {
-    //   Alert.alert('Error', "Image didn't upload! ", [{text: 'close'}]);
-    // })
-  };
-  // chooseImage() {
-  //   ImagePicker.showImagePicker(this.options, response => {
-  //     let source = {uri: response.uri};
-  //     this.setState({
-  //       images: source,
-  //     });
-  //   });
-  // }
-
-  // renderItem(item) {
-  //   return (
-  //     <View>
-  //       {/* <Text>{item.url.toString()}</Text> */}
-  //       <Image source={item.url} style={styles.posterImages} />
-  //     </View>
-  //   );
-  // }
-
-  // onSelectImage(image) {
-  //   // let imageList = [];
-  //   const source = {uri: image.path};
-  //   let item = {
-  //     id: Date.now(),
-  //     url: source,
-  //     content: image.data,
-  //   };
-  //   // imageList.push(item);
-  //   // this.setState({images: imageList});
-  //   this.renderItem(item)
-  // }
-
-  // takePhotoFromCamera() {
-  //   ImagePicker.openCamera({
-  //     width: 300,
-  //     height: 400,
-  //     cropping: true,
-  //   }).then(image => {
-  //     this.onSelectImage(image);
-  //     // console.log(image);
-  //   });
-  // }
-
-  // choosePhotoFromLibrary() {
-  //   ImagePicker.openPicker({
-  //     width: 300,
-  //     height: 400,
-  //     // multiple: true,
-  //     mediaType: 'photo',
-  //     // cropping: false
-  //   }).then(image => {
-  //     this.onSelectImage(image);
-  //   });
-  // }
-
-  // selectImage() {
-  //   const Buttons = ['التقط صورة', 'اختر من الاستديو', 'إغلاق'];
-  //   ActionSheet.show(
-  //     {
-  //       options: Buttons,
-  //       cancelButtonIndex: 2,
-  //       title: 'اختر صورة ',
-  //     },
-  //     ButtonIndex => {
-  //       switch (ButtonIndex) {
-  //         case 0:
-  //           this.takePhotoFromCamera();
-  //           break;
-  //         case 1:
-  //           this.choosePhotoFromLibrary();
-  //           break;
-  //         default:
-  //           break;
-  //       }
-  //     },
-  //   );
-  // }
+    };
+    _addEvent(formData, this.state.posterImage);
+  }
 
   render() {
-    // const [date, setDate] = useState(new Date());
     const eventType = [
       {value: 'معرض'},
       {value: 'فنون وثقافة'},
@@ -452,57 +344,43 @@ export default class AddEventPage extends Component {
                   this.setState({eventDescription: desc});
                 }}
               />
-              {/* <TouchableOpacity> */}
-              {/* {ImagePicker.openPicker({
-              multiple: true,
-              mediaType: 'photo',
-              includeBase64: true,
-            }).then(images => {
-              <Text>{images.path}</Text>;
-            })} */}
-              {/* <Root> */}
-              <TouchableOpacity
-                style={styles.dateContainer}
-                onPress={() => this.chooseImage()}>
-                <TextInput
-                  editable={false}
-                  placeholder="اختر صورة..."
-                  placeholderTextColor="white"
-                  keyboardType="default"
-                  style={{
-                    borderBottomColor: '#ccc',
-                    borderBottomWidth: 1,
-                    paddingHorizontal: 40,
-                    borderRadius: 6,
-                    paddingVertical: 6,
-                    backgroundColor: '#238ECA',
-                  }}
-                />
+              <View style={styles.dateContainer}>
+                <TouchableOpacity onPress={() => this.chooseImage()}>
+                  <TextInput
+                    editable={false}
+                    placeholder="اختر صورة..."
+                    placeholderTextColor="white"
+                    keyboardType="default"
+                    style={{
+                      borderBottomColor: '#ccc',
+                      borderBottomWidth: 1,
+                      paddingHorizontal: 40,
+                      borderRadius: 6,
+                      paddingVertical: 6,
+                      backgroundColor: '#238ECA',
+                    }}
+                  />
+                </TouchableOpacity>
                 <Text style={styles.dateText}>اختر صورة الفعالية</Text>
-              </TouchableOpacity>
+              </View>
               <View style={styles.imageContainer}>
                 <Image
                   source={this.state.previewImage}
                   style={styles.posterImages}
                 />
-
-                {/* <Text>{this.state.posterImage.toString()}</Text> */}
+                 <Text style={styles.posterBtnTxt}>معاينة الصورة:</Text>
               </View>
-              {/* <FlatList
-                  data={this.state.images}
-                  renderItem={() => Object.values(this.renderItem).map}
-                  keyExtractor={(item, index) => index.toString()}
-                /> */}
-              {/* </Root> */}
-              <Button style={styles.sendBtn} onPress={() => this.upload()}>
+              {
+                this.state.posterImage ? (
+                  <Button style={styles.sendBtn} onPress={() => this.handleForm()}>
                 <Text style={styles.sendTxt}>إرسال</Text>
               </Button>
-
-              {/* <Image
-                source={this.state.posterImage}
-                style={styles.posterImages}
-              /> */}
-              <Text>{this.state.posterImage}</Text>
+                ) : (
+                  <Button style={styles.sendBtnNo} disabled>
+                <Text style={styles.sendTxt}>إرسال</Text>
+              </Button>
+                )
+              }
             </Form>
           </ScrollView>
         </React.Fragment>
@@ -544,7 +422,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   header: {
-    backgroundColor: 'rgb(1, 106, 167)',
+    backgroundColor: '#fd7066',
     width: '100%',
   },
   dateContainer: {
@@ -574,13 +452,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   imageContainer: {
-    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
   },
   posterImages: {
     height: 100,
-    width: 500,
+    width: 100,
+    marginHorizontal: 6,
     borderRadius: 4,
     resizeMode: 'contain',
+  },
+  posterBtnTxt: {
+    paddingHorizontal: 30,
+    alignSelf: 'center',
+    fontSize: 15,
   },
   sendBtn: {
     width: 100,
@@ -589,6 +474,14 @@ const styles = StyleSheet.create({
     marginTop: 25,
     borderRadius: 4,
     backgroundColor: '#19B064',
+  },
+  sendBtnNo: {
+    width: 100,
+    height: 35,
+    marginHorizontal: '30%',
+    marginTop: 25,
+    borderRadius: 4,
+    backgroundColor: '#ddd',
   },
   sendTxt: {
     marginLeft: 37,

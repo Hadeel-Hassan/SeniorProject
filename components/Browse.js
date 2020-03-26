@@ -35,77 +35,40 @@ import {
   faHeart,
 } from '@fortawesome/free-regular-svg-icons';
 import {faUsers} from '@fortawesome/free-solid-svg-icons';
-// import { SafeAreaView } from 'react-navigation';
-import {db} from '../firebase/config';
-// import Icon from 'react-native-vector-icons';
 
+import {db} from '../firebase/config';
 export default class Browse extends Component {
   state = {
     items: [],
+    isSearchActive: false,
+    test: "hi"
   };
 
-  c() {
-    getAllData();
+  last() {
+    return <View style={{paddingVertical: 20}}></View>;
   }
-  //   };
-  // }
-  // componentDidMount() {
-  //   console.log(this.state.myData);
-  // }
+
   componentWillMount() {
-    // await getAllData();
-    // this.setState({myData: data})
     let d = [];
     db.collection('events')
       .where('eventStatus', '==', 'accepted')
       .get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
-          // doc.data() is never undefined for query doc snapshots
-          // console.log(doc.id, ' => ', doc.data());
-          // console.log(data);
-          // console.log(doc.data());
-
           d.push(doc.data());
-          // data.push(JSON.stringify(doc.data()));
-          // console.log(d);
-
-          // console.log("func= ", data);
         });
       })
       .then(() => {
-        // this.state.myData.concat(d);
-        // console.log(d);
-        // this.state.myData.concat(d);
         this.setState({items: d});
-        console.log('browse= ', this.state.items);
       })
       .catch(function(error) {
         console.log('Error getting documents: ', error);
       });
   }
 
-  // // getDataFromAPI = async () => {
-  // //   const endpoint = 'https://jsonplaceholder.typicode.com/photos?_limit=5';
-  // //   const res = await fetch(endpoint);
-  // //   const data = await res.json();
-  // //   this.setState({items: data});
-  // // };
-
   _renderItem = ({item, index}) => {
     return (
       <TouchableOpacity style={styles.card}>
-        {/*         
-        <Image
-          style={styles.cardImage}
-          source={{
-            uri: item.url,
-          }}></Image>
-        <Text style={styles.cardText}>
-          {item.title}
-          {/* <Icon name="favorite" /> 
-        </Text>
-        <Text style={styles.cardDate}>{item.time}</Text> */}
         <Card style={{marginBottom: 20, width: 328, borderRadius: 10}}>
           <CardItem>
             <Left>
@@ -114,7 +77,7 @@ export default class Browse extends Component {
                   icon={faHeart}
                   size={16}
                   color="#aaa"
-                  style={{top: 2}}
+                  style={{top: 4}}
                 />
                 <Text
                   style={{
@@ -133,14 +96,13 @@ export default class Browse extends Component {
           <CardItem cardBody>
             <Image
               source={{
-                uri: 'https://homestaymatch.com/images/no-image-available.png',
+                uri: item.imageURL,
               }}
               style={{height: 165, width: null, flex: 1}}
             />
           </CardItem>
           <CardItem footer>
             <Left style={{flex: 1, flexDirection: 'row'}}>
-              {/* <Button > */}
               <Text
                 style={{
                   marginLeft: 6,
@@ -150,18 +112,9 @@ export default class Browse extends Component {
                 }}>
                 {item.age_group}
               </Text>
-              <FontAwesomeIcon
-                icon={faUsers}
-                size={16}
-                color="#aaa"
-                // style={{marginLeft: 0}}
-              />
-
-              {/* </Button> */}
+              <FontAwesomeIcon icon={faUsers} size={16} color="#aaa" />
             </Left>
             <Body style={{flex: 1, flexDirection: 'row', marginLeft: 25}}>
-              {/* <Button > */}
-
               <Text
                 style={{
                   marginLeft: -30,
@@ -172,7 +125,6 @@ export default class Browse extends Component {
                 {item.date.replace(/-/g, '/')}
               </Text>
               <FontAwesomeIcon icon={faCalendarAlt} size={16} color="#aaa" />
-              {/* </Button> */}
             </Body>
             <Right style={{flex: 1, flexDirection: 'row', marginRight: -20}}>
               <Text
@@ -205,15 +157,15 @@ export default class Browse extends Component {
     }
     return (
       <>
-        <TopNav history={this.props.history} />
+        <TopNav history={this.props.history} eventsList={this.state.items} changeState={this}/>
         <View style={styles.content}>
           <SafeAreaView>
             <FlatList
-              // numColumns={3}
               style={container}
               data={this.state.items}
               keyExtractor={(item, index) => index.toString()}
               renderItem={this._renderItem}
+              ListFooterComponent={this.last()}
             />
           </SafeAreaView>
         </View>
@@ -225,11 +177,8 @@ export default class Browse extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
-    // width: '90%',
-    // marginHorizontal: 5,
-    // paddingHorizontal: -20,
-    // paddingRight: -40,
+    // marginTop: 40,
+    // flexGrow: 1
   },
   header: {
     backgroundColor: 'blue',
@@ -239,7 +188,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: '95%',
     // zIndex: -1,
-    marginTop: -380,
+    top: 20,
   },
   cardText: {
     fontSize: 18,
@@ -257,8 +206,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   card: {
-    // backgroundColor: '#69BBE8',
-    // borderRadius: 20,
     marginBottom: 10,
     marginLeft: '2%',
     width: '100%',

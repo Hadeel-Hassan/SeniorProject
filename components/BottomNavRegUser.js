@@ -91,7 +91,7 @@ export default class BottomNav extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: 'rgb(21, 34, 44)',
+    // backgroundColor: '#fd7066',
     // flex: 1,
     // flexDirection: 'row',
     alignItems: 'center',
@@ -132,6 +132,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   footer: {
-    backgroundColor: 'rgb(1, 106, 167)',
+    backgroundColor: '#fd7066',
   },
 });

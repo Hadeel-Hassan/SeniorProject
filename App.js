@@ -9,6 +9,7 @@ import {
   View,
   Text,
   StatusBar,
+  YellowBox
 } from 'react-native';
 
 import {
@@ -27,8 +28,6 @@ import ContactUs from './components/ContactUs';
 import AddEventPage from './components/AddEventPage';
 import Browse from './components/Browse'
 import Favorite from './components/Favorite';
-import BottomNavRegUser from './components/BottomNavRegUser';
-import { signup } from './firebase/config';
 import Chat from './components/Chat';
 import EventOwner from './components/EventOwner';
 import {getCurrentUser, getCurrentUserEmail} from './firebase/config';
@@ -38,9 +37,11 @@ import BrowseGrid from './components/BrowseGrid';
 
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
-
+// YellowBox.ignoreWarnings(['Warning: ReactNative.createElement']);
 export default class App extends Component {
+  
   render() {
+    console.disableYellowBox = true; 
     return (
     <NativeRouter>
       <SafeAreaView style={styles.container}>

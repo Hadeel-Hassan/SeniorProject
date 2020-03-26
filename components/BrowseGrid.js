@@ -35,46 +35,25 @@ import {
   faHeart,
 } from '@fortawesome/free-regular-svg-icons';
 import {faUsers} from '@fortawesome/free-solid-svg-icons';
-// import { SafeAreaView } from 'react-navigation';
 import {db} from '../firebase/config';
 import TopNavGrid from './TopNavGrid';
-// import Icon from 'react-native-vector-icons';
 
 export default class BrowseGrid extends Component {
   state = {
     items: [],
   };
 
-  //   };
-  // }
-  // componentDidMount() {
-  //   console.log(this.state.myData);
-  // }
   componentWillMount() {
-    // await getAllData();
-    // this.setState({myData: data})
     let d = [];
     db.collection('events')
       .where('eventStatus', '==', 'accepted')
       .get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
-          // doc.data() is never undefined for query doc snapshots
-          // console.log(doc.id, ' => ', doc.data());
-          // console.log(data);
-          // console.log(doc.data());
-
           d.push(doc.data());
-          // data.push(JSON.stringify(doc.data()));
-          // console.log(d);
-
-          // console.log("func= ", data);
         });
       })
       .then(() => {
-        // this.state.myData.concat(d);
-        // console.log(d);
-        // this.state.myData.concat(d);
         this.setState({items: d});
         console.log('browse= ', this.state.items);
       })
@@ -82,28 +61,9 @@ export default class BrowseGrid extends Component {
         console.log('Error getting documents: ', error);
       });
   }
-
-  // // getDataFromAPI = async () => {
-  // //   const endpoint = 'https://jsonplaceholder.typicode.com/photos?_limit=5';
-  // //   const res = await fetch(endpoint);
-  // //   const data = await res.json();
-  // //   this.setState({items: data});
-  // // };
-
   _renderItem = ({item, index}) => {
     return (
       <TouchableOpacity style={styles.card}>
-        {/*         
-        <Image
-          style={styles.cardImage}
-          source={{
-            uri: item.url,
-          }}></Image>
-        <Text style={styles.cardText}>
-          {item.title}
-          {/* <Icon name="favorite" /> 
-        </Text>
-        <Text style={styles.cardDate}>{item.time}</Text> */}
         <Card style={{marginBottom: 20, width: 170, borderRadius: 10}}>
           <CardItem style={{height: 70}}>
             <Left>
@@ -126,7 +86,7 @@ export default class BrowseGrid extends Component {
           <CardItem cardBody>
             <Image
               source={{
-                uri: 'https://homestaymatch.com/images/no-image-available.png',
+                uri: item.imageURL,
               }}
               style={{height: 165, width: null, flex: 1}}
             />
@@ -147,17 +107,9 @@ export default class BrowseGrid extends Component {
                 icon={faUsers}
                 size={16}
                 color="#aaa"
-                // style={{marginLeft: 0}}
               />
 
-              {/* </Button> */}
             </Left>
-            {/* <Body style={{flex: 1, flexDirection: 'row', marginLeft: 25}}>
-              
-              <Text style={{marginLeft: -30, marginRight: 4, fontSize: 12, alignSelf: 'center'}}>{item.date.replace(/-/g, "/")}</Text>
-              <FontAwesomeIcon icon={faCalendarAlt} size={16} color="#aaa" />
-            
-            </Body> */}
             <Right style={{flex: 1, flexDirection: 'row', marginRight: -55}}>
               <Text
                 style={{
@@ -209,20 +161,12 @@ export default class BrowseGrid extends Component {
 const styles = StyleSheet.create({
   container: {
     marginTop: 40,
-    // width: '90%',
-    // marginHorizontal: 5,
-    // paddingHorizontal: -20,
-    // paddingRight: -40,
   },
   header: {
     backgroundColor: 'blue',
   },
   content: {
     flex: 1,
-    // position: 'relative',
-    // marginHorizontal: 10,
-    // width: 340,
-    // zIndex: -1,
     marginTop: -380,
   },
   cardText: {
@@ -241,15 +185,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   card: {
-    // backgroundColor: '#69BBE8',
-    // borderRadius: 20,
-    // flexDirection: 'row',
-    // flex: 1,
-    // marginBottom: 10,
-    // marginLeft: '2%',
-    // width: 180,
-    // width: 50,
-    // height: 180,
     shadowColor: '#000',
     shadowOpacity: 1,
     shadowOffset: {
