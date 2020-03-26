@@ -166,6 +166,7 @@ export default class Browse extends Component {
               keyExtractor={(item, index) => index.toString()}
               renderItem={this._renderItem}
               ListFooterComponent={this.last()}
+              ListEmptyComponent={<Text>لم يتم العثور على فعاليات</Text>}
             />
           </SafeAreaView>
         </View>

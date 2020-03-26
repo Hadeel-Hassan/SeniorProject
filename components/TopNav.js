@@ -42,18 +42,19 @@ export default class TopNav extends Component {
   c() {
     this.props.changeState.setState({test: 'bye'});
   }
+  defaultItems = this.props.eventsList;
 
-  handleSearch(input){
-    this.setState({searchQuery: input})
-    data = data.filter(function (item) {
-      return !item.string.includes("Lets");
-    });
-    console.log(data);
-  }
-
-  componentDidMount(){
-    console.log(this.props.eventsList);
-    
+  handleSearch(input) {
+    // this.setState({searchQuery: input})
+    if (input === '') {
+      this.props.changeState.setState({items: this.defaultItems});
+    } else {
+      var data = this.props.eventsList.filter(function(item) {
+        return item.name.includes(input);
+      });
+      // console.log(data);
+      this.props.changeState.setState({items: data});
+    }
   }
 
   render() {
@@ -73,7 +74,10 @@ export default class TopNav extends Component {
               onChangeText={input => this.handleSearch(input)}
             />
             <TouchableOpacity
-              onPress={() => this.setState({isSearchActive: false})}>
+              onPress={() => {
+                this.setState({isSearchActive: false});
+                this.props.changeState.setState({items: this.defaultItems});
+              }}>
               <FontAwesomeIcon icon={faArrowRight} size={20} color="#bbb" />
             </TouchableOpacity>
           </Header>
