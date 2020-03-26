@@ -17,14 +17,8 @@ import {
   Alert,
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-// import {Button, Icon} from 'native-base';
-import {BottomNavigation} from 'react-native-material-ui';
-import Input from './Input';
-import SignUp from './SignUp';
 import {faArrowAltCircleLeft} from '@fortawesome/free-solid-svg-icons';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
-
-import {login, signup} from '../firebase/config'
+import {login, getCurrentUserID, addToFavorite} from '../firebase/config'
 
 
 export default class LandingPage extends Component {

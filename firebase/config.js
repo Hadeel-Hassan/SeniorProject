@@ -59,7 +59,6 @@ export function _addEvent(event, poster) {
         .catch(error => {
           Alert.alert('Error', "Form didn't upload! ", [{text: 'close'}]);
         });
-      // Alert.alert('تم الرفع', 'تم رفع الصورة بنجاح!', [{text: 'موافق'}]);
     })
     .catch(() => {
       dispatch({
@@ -74,7 +73,7 @@ export function login(email, password) {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(value => {
-      Alert.alert('Good', 'This worked!', [{text: 'close'}]);
+      // console.log("inside login: ", value);
     });
 }
 
@@ -107,4 +106,6 @@ export function getCurrentUser() {
   return firebase.auth().currentUser;
 }
 
-
+export function getCurrentUserID() {
+  return firebase.auth().currentUser.uid;
+}

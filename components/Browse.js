@@ -8,6 +8,7 @@ import {
   FlatList,
   ActivityIndicator,
   SafeAreaView,
+  Alert
 } from 'react-native';
 import BottomNavRegUser from './BottomNavRegUser';
 import TopNav from './TopNav';
@@ -34,14 +35,18 @@ import {
   faCalendarAlt,
   faHeart,
 } from '@fortawesome/free-regular-svg-icons';
-import {faUsers} from '@fortawesome/free-solid-svg-icons';
+import {
+  faUsers,
+  faHeart as faHeartSolid,
+} from '@fortawesome/free-solid-svg-icons';
 
-import {db} from '../firebase/config';
+import {db, getCurrentUserID} from '../firebase/config';
 export default class Browse extends Component {
   state = {
     items: [],
     isSearchActive: false,
-    test: "hi"
+    test: 'hi',
+    eventId: '',
   };
 
   last() {
@@ -55,7 +60,9 @@ export default class Browse extends Component {
       .get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
-          d.push(doc.data());
+          let myData = doc.data();
+          myData.eid = doc.id;
+          d.push(myData);
         });
       })
       .then(() => {
@@ -66,6 +73,17 @@ export default class Browse extends Component {
       });
   }
 
+  handleFavorite(eid, eventToAdd) {
+    db.collection('favorite')
+      .doc(`fav_${getCurrentUserID()}`)
+      .collection('my_favorites')
+      .doc(eid)
+      .set(eventToAdd)
+      .then(() => {
+        Alert.alert('تمت الإضافة للمفضلة', '', [{text: 'إغلاق'}]);
+      });
+  }
+
   _renderItem = ({item, index}) => {
     return (
       <TouchableOpacity style={styles.card}>
@@ -73,12 +91,14 @@ export default class Browse extends Component {
           <CardItem>
             <Left>
               <Body style={{flex: 1, flexDirection: 'row', marginLeft: -6}}>
-                <FontAwesomeIcon
-                  icon={faHeart}
-                  size={16}
-                  color="#aaa"
-                  style={{top: 4}}
-                />
+                <TouchableOpacity
+                  onPress={() => this.handleFavorite(item.eid, item)}>
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    size={24}
+                    color="#aaa"
+                  />
+                </TouchableOpacity>
                 <Text
                   style={{
                     color: '#bbb',
@@ -157,7 +177,11 @@ export default class Browse extends Component {
     }
     return (
       <>
-        <TopNav history={this.props.history} eventsList={this.state.items} changeState={this}/>
+        <TopNav
+          history={this.props.history}
+          eventsList={this.state.items}
+          changeState={this}
+        />
         <View style={styles.content}>
           <SafeAreaView>
             <FlatList
