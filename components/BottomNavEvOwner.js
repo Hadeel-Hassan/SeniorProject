@@ -21,7 +21,7 @@ export default class BottomNavEvOwner extends Component {
     return (
         <Footer>
           <FooterTab style={styles.footer}>
-            <Button onPress={() => this.props.history.push('/')}>
+            <Button onPress={() => this.props.history.push('/owhome')}>
               <FontAwesomeIcon icon={faHome} color="white" size={23} />
             </Button>
             <Button onPress={() => this.props.history.push('/add')}>

@@ -46,6 +46,7 @@ export function _addEvent(event, poster) {
     })
     .then(url => {
       event.imageURL = url;
+      event.ownerId = getCurrentUserID();
       window.XMLHttpRequest = tempWindowXMLHttpRequest;
       db.collection('events')
         .add(event)

@@ -128,7 +128,7 @@ export default class AddEventPage extends Component {
             <Left>
               <TouchableOpacity
                 transparent
-                onPress={() => this.props.history.push('/')}>
+                onPress={() => this.props.history.push('/owhome')}>
                 <FontAwesomeIcon icon={faArrowLeft} color="white" />
               </TouchableOpacity>
             </Left>
