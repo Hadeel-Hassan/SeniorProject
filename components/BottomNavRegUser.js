@@ -63,7 +63,7 @@ export default class BottomNav extends Component {
         {/* <Container Style={styles.container}> */}
         <Footer>
           <FooterTab style={styles.footer}>
-            <Button onPress={() => this.props.history.push('/')}>
+            <Button onPress={() => this.props.history.push('/home')}>
               <FontAwesomeIcon icon={faHome} color="white" size={23} />
               {/* <Text>تصفح الفعاليات</Text> */}
             </Button>

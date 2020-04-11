@@ -39,20 +39,16 @@ export default class TopNavEvOwner extends Component {
     fullData: [],
   };
 
-  c() {
-    this.props.changeState.setState({test: 'bye'});
-  }
   defaultItems = this.props.eventsList;
 
   handleSearch(input) {
-    // this.setState({searchQuery: input})
     if (input === '') {
       this.props.changeState.setState({items: this.defaultItems});
     } else {
+      this.props.changeState.setState({isSearch: true});
       var data = this.props.eventsList.filter(function(item) {
         return item.name.includes(input);
       });
-      // console.log(data);
       this.props.changeState.setState({items: data});
     }
   }
@@ -75,7 +71,7 @@ export default class TopNavEvOwner extends Component {
             />
             <TouchableOpacity
               onPress={() => {
-                this.setState({isSearchActive: false});
+                this.setState({isSearchActive: false, isSearch: false});
                 this.props.changeState.setState({items: this.defaultItems});
               }}>
               <FontAwesomeIcon icon={faArrowRight} size={20} color="#bbb" />
@@ -117,14 +113,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 60,
     marginTop: 0,
-    // marginBottom: -70,
-    // elevation: 100
   },
   headerContainerS: {
     backgroundColor: '#fd7066',
     marginTop: -2,
-    // marginBottom: -100,
-    // top: 50,
     height: 50,
     width: '100%',
   },
@@ -152,10 +144,6 @@ const styles = StyleSheet.create({
   },
   searchPlaceholder: {
     textAlign: 'right',
-    // alignSelf: 'flex-end',
-    // alignContent: 'flex-end',
-    // alignItems: 'flex-end',
     backgroundColor: 'white',
-    // paddingLeft: 60,
   },
 });

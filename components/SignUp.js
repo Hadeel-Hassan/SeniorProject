@@ -74,6 +74,8 @@ export default class SignUp extends Component {
           this.state.femaleUrl,
         );
       }
+
+      this.props.history.push('/')
     }
   }
   render() {
@@ -95,7 +97,7 @@ export default class SignUp extends Component {
             color="rgb(1, 106, 167)"
           />
         </TouchableOpacity>
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={{flex: 1, width: 300}}>
           <Text style={styles.title}>أنشئ حسابك الجديد</Text>
           <TextInput
             style={styles.input}

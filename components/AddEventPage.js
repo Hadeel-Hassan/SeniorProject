@@ -1,38 +1,26 @@
 import React, {Component} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   View,
   Text,
   Image,
-  Alert,
-  Picker,
-  ActionSheetIOS,
-  DocumentPicker,
   TextInput,
   ScrollView,
   TouchableOpacity,
-  FlatList,
 } from 'react-native';
-import {Form, Header, Body, Left, Button, Root, ActionSheet} from 'native-base';
+import {Form, Body, Left, Button} from 'native-base';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
-  faArrowLeft,
-  faTimes,
-  faTimesCircle,
+  faArrowLeft, faArrowRight,
 } from '@fortawesome/free-solid-svg-icons';
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button';
 import {faClock} from '@fortawesome/free-regular-svg-icons';
-import {Hoshi} from 'react-native-textinput-effects';
-import Input from './Input';
-// import firebase from '../firebase/config';
-import BottomNavRegUser from './BottomNavRegUser';
 import {Dropdown} from 'react-native-material-dropdown';
-// import Date from './Date'
 import DatePicker from 'react-native-datepicker';
 import ImagePicker from 'react-native-image-picker';
 import {_addEvent} from '../firebase/config';
-import axios from 'axios';
+import {Header} from 'react-native-elements';
+
 
 export default class AddEventPage extends Component {
   state = {
@@ -52,6 +40,7 @@ export default class AddEventPage extends Component {
     eventDescription: '',
     eventPoster: '',
     previewImage: '',
+    priceUrl: '',
     posterImage: null,
     posterExtension: '',
     status: 'pending',
@@ -95,6 +84,7 @@ export default class AddEventPage extends Component {
       organizer: this.state.eventOrganizer,
       description: this.state.eventDescription,
       eventStatus: this.state.status,
+      price_Url: this.state.priceUrl,
     };
     _addEvent(formData, this.state.posterImage);
   }
@@ -124,19 +114,25 @@ export default class AddEventPage extends Component {
     return (
       <>
         <React.Fragment>
-          <Header style={styles.header}>
-            <Left>
+          <Header placement="center"
+            backgroundColor={'#fd7066'}
+            rightContainerStyle={{marginRight: 20}}
+            leftContainerStyle={{marginLeft: 20}}
+            leftComponent={
+              <Text></Text>
+            }
+            centerComponent={{
+              text: 'إضافة فعالية جديدة',
+              style: {color: '#fff', fontSize: 18},
+            }}
+            rightComponent={
               <TouchableOpacity
                 transparent
                 onPress={() => this.props.history.push('/owhome')}>
-                <FontAwesomeIcon icon={faArrowLeft} color="white" />
+                <FontAwesomeIcon icon={faArrowRight} size={20} color="white" />
               </TouchableOpacity>
-            </Left>
-            <Body>
-              <Text style={styles.title}>إضافة فعالية</Text>
-            </Body>
-          </Header>
-          <ScrollView>
+            } />
+          <ScrollView style={{width: "85%"}}>
             <Form style={styles.form}>
               <TextInput
                 style={styles.input}
@@ -185,7 +181,6 @@ export default class AddEventPage extends Component {
                       marginLeft: 36,
                       borderRadius: 50,
                     },
-                    // ... You can check the source to find the other keys.
                   }}
                   onDateChange={date => {
                     this.setState({date: date});
@@ -214,7 +209,7 @@ export default class AddEventPage extends Component {
                     }
                     mode="time"
                     placeholder="select date"
-                    format="hh:mm :a"
+                    format="hh:mm:a"
                     confirmBtnText="اختيار"
                     cancelBtnText="إغلاق"
                     customStyles={{
@@ -222,14 +217,11 @@ export default class AddEventPage extends Component {
                         marginLeft: 36,
                         borderRadius: 50,
                       },
-                      // ... You can check the source to find the other keys.
                     }}
                     onDateChange={date => {
                       this.setState({timeEnd: date.toString()});
                     }}
                   />
-                  {/* <Text>{this.state.timeStart.toTimeString().toString().substring(0,5)}</Text> */}
-                  {/* <Text>{this.state.timeEnd.toString()}</Text> */}
                 </View>
                 <View style={{marginHorizontal: 10}}>
                   <Text style={styles.timeText}>بداية وقت الفعالية</Text>
@@ -259,7 +251,7 @@ export default class AddEventPage extends Component {
                         marginLeft: 36,
                         borderRadius: 50,
                       },
-                      // ... You can check the source to find the other keys.
+                     
                     }}
                     onDateChange={date => {
                       this.setState({timeStart: date.toString()});
@@ -306,6 +298,15 @@ export default class AddEventPage extends Component {
                       this.setState({kidTicket: price});
                     }}
                   />
+                  <TextInput
+                    placeholder="رابط الدفع"
+                    placeholderTextColor="darkgray"
+                    keyboardType="default"
+                    style={{borderBottomColor: '#aaa', borderBottomWidth: 1}}
+                    onChangeText={url => {
+                      this.setState({priceUrl: url});
+                    }}
+                  />
                 </View>
               ) : (
                 () => {
@@ -334,7 +335,7 @@ export default class AddEventPage extends Component {
                 }}
               />
               <TextInput
-                placeholder="وصف الفعالية"
+                placeholder="وصف الفعالية و معلومات إضافية"
                 multiline
                 returnKeyType="next"
                 placeholderTextColor="darkgray"
@@ -396,13 +397,13 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   form: {
-    width: 270,
+    width: "95%",
     marginVertical: 20,
   },
   input: {
     height: 40,
     marginVertical: 15,
-    width: 270,
+    // width: 270,
     marginBottom: 20,
     textAlign: 'right',
     paddingVertical: 8,
@@ -413,7 +414,6 @@ const styles = StyleSheet.create({
   infoInput: {
     paddingBottom: 50,
     marginVertical: 15,
-    width: 270,
     marginBottom: 20,
     textAlign: 'right',
     paddingVertical: 8,
@@ -429,6 +429,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginVertical: 15,
+    alignSelf: 'center'
   },
   dateText: {
     marginHorizontal: 8,
@@ -446,14 +447,17 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginVertical: 15,
+    alignSelf: 'center'
   },
   radio: {
     display: 'flex',
     flexDirection: 'row',
+    alignSelf: 'center'
   },
   imageContainer: {
     flex: 1,
     flexDirection: 'row',
+    alignSelf: 'center'
   },
   posterImages: {
     height: 100,
@@ -474,6 +478,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     borderRadius: 4,
     backgroundColor: '#19B064',
+    alignSelf: 'center'
   },
   sendBtnNo: {
     width: 100,
@@ -482,6 +487,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     borderRadius: 4,
     backgroundColor: '#ddd',
+    alignSelf: 'center'
   },
   sendTxt: {
     marginLeft: 37,

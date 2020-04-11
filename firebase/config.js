@@ -24,7 +24,7 @@ const config = {
 const firebase = fb.initializeApp(config);
 export const db = firebase.firestore();
 const storage = firebase.storage();
-
+export const firebase_auth = firebase.auth();
 export function _addEvent(event, poster) {
   window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
   window.Blob = Blob;
@@ -69,13 +69,26 @@ export function _addEvent(event, poster) {
     });
 }
 
-export function login(email, password) {
+export function edit(username) {
   firebase
     .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then(value => {
-      // console.log("inside login: ", value);
+    .currentUser.updateProfile({displayName: username})
+    .then(() => {
+      Alert.alert('', 'تم تغيير اسم المستخدم بنجاح', [{text: 'إغلاق'}]);
     });
+}
+
+export function _editAvatar(avatar) {
+  firebase
+    .auth()
+    .currentUser.updateProfile({photoURL: avatar})
+    .then(() => {
+      Alert.alert('', 'تم تغيير الأفاتار بنجاح', [{text: 'إغلاق'}]);
+    });
+}
+
+export function login(email, password) {
+  firebase.auth().signInWithEmailAndPassword(email, password);
 }
 
 export function signup(email, password, username, avatar) {
@@ -89,14 +102,34 @@ export function signup(email, password, username, avatar) {
         photoURL: avatar,
       });
       console.log(userInfo);
-      Alert.alert('Good', 'This worked!', [{text: 'close'}]);
+      Alert.alert('', 'تم إنشاء حسابك بنجاح!', [{text: 'إغلاق'}]);
+    })
+    .catch(error => {
+      switch (error.code) {
+        case 'auth/email-already-exists':
+          Alert.alert('خطأ!', 'هذا البريد الإلكتروني موجود مسبقا', [
+            {text: 'إغلاق'},
+          ]);
+        case 'auth/invalid-email':
+          Alert.alert('خطأ!', 'البريد الإلكتروني الذي قمت بإدخاله غير صحيح', [
+            {text: 'إغلاق'},
+          ]);
+        case 'auth/invalid-password':
+          Alert.alert('خطأ!', 'كلمة السر غير صحيحة. يجب أن تكون من 6 رموز وأكثر.', [
+            {text: 'إغلاق'},
+          ]);
+      }
     });
 }
 
 export function signout() {
-  firebase.signout().then(() => {
-    Alert.alert('Good', 'This worked!', [{text: 'close'}]);
-  });
+  firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      Alert.alert('', 'تم تسجيل الخروج', [{text: 'إغلاق'}]);
+      return '1';
+    });
 }
 
 export function getCurrentUserEmail() {

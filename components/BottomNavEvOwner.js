@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
 import {View, StyleSheet} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faPlus,
-  faUser,
-  faHome,
-} from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faUser, faHome} from '@fortawesome/free-solid-svg-icons';
 import {
   Container,
   Header,
@@ -19,19 +15,19 @@ import {
 export default class BottomNavEvOwner extends Component {
   render() {
     return (
-        <Footer>
-          <FooterTab style={styles.footer}>
-            <Button onPress={() => this.props.history.push('/owhome')}>
-              <FontAwesomeIcon icon={faHome} color="white" size={23} />
-            </Button>
-            <Button onPress={() => this.props.history.push('/add')}>
-              <FontAwesomeIcon icon={faPlus} color="white" size={23} />
-            </Button>
-            <Button onPress={() => this.props.history.push('/profile')}>
-              <FontAwesomeIcon icon={faUser} color="white" size={23} />
-            </Button>
-          </FooterTab>
-        </Footer>
+      <Footer>
+        <FooterTab style={styles.footer}>
+          <Button onPress={() => this.props.history.push('/owhome')}>
+            <FontAwesomeIcon icon={faHome} color="white" size={23} />
+          </Button>
+          <Button onPress={() => this.props.history.push('/add')}>
+            <FontAwesomeIcon icon={faPlus} color="white" size={23} />
+          </Button>
+          <Button onPress={() => this.props.history.push('/profile')}>
+            <FontAwesomeIcon icon={faUser} color="white" size={23} />
+          </Button>
+        </FooterTab>
+      </Footer>
     );
   }
 }

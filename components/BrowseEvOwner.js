@@ -10,49 +10,40 @@ import {
   SafeAreaView,
   Alert,
 } from 'react-native';
-import BottomNavRegUser from './BottomNavRegUser';
-import TopNav from './TopNav';
-import {
-  Container,
-  Header,
-  Item,
-  Input,
-  Row,
-  Button,
-  Card,
-  CardItem,
-  Thumbnail,
-  Segment,
-  Left,
-  Right,
-  Icon,
-  Body,
-} from 'native-base';
+import {Card, CardItem, Left, Right, Body} from 'native-base';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faClock,
-  faCalendar,
-  faCalendarAlt,
-  faHeart,
-} from '@fortawesome/free-regular-svg-icons';
-import {
-  faUsers,
-  faHeart as faHeartSolid,
-  faInfoCircle,
-} from '@fortawesome/free-solid-svg-icons';
-
-import {db, getCurrentUserID} from '../firebase/config';
+import {faCalendarAlt} from '@fortawesome/free-regular-svg-icons';
+import {faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 import TopNavEvOwner from './TpoNavEvOwner';
+import EventInfoEvOwner from './EventInfoEvOwner';
+import {db, getCurrentUserID} from '../firebase/config';
+
 export default class BrowseEvOwner extends Component {
   state = {
     items: [],
     isSearchActive: false,
-    test: 'hi',
     eventId: '',
+    isSearch: false,
+    isInfo: false,
+    infoItem: {},
+    ch: false,
   };
 
   last() {
-    return <View style={{paddingVertical: 20}}></View>;
+    return <View style={{paddingVertical: 20}} />;
+  }
+
+  defaultItems = this.state.items;
+
+  handleSearch(input) {
+    if (input === '') {
+      this.setState({items: this.defaultItems});
+    } else {
+      var data = this.state.items.filter(function(item) {
+        return item.name.includes(input);
+      });
+      this.setState({items: data});
+    }
   }
 
   componentWillMount() {
@@ -77,8 +68,10 @@ export default class BrowseEvOwner extends Component {
 
   _renderItem = ({item, index}) => {
     return (
-      <TouchableOpacity style={styles.card}>
-        <Card style={{marginBottom: 20, width: 328, borderRadius: 10}}>
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => this.setState({isInfo: true, infoItem: item})}>
+        <Card style={{marginBottom: 20, width: 370, borderRadius: 10}}>
           <CardItem>
             <Left>
               <Body style={{flex: 1, flexDirection: 'row', marginLeft: -6}}>
@@ -106,18 +99,35 @@ export default class BrowseEvOwner extends Component {
           </CardItem>
           <CardItem footer>
             <Left style={{flex: 1, flexDirection: 'row'}}>
-              <Text
-                style={{
-                  marginLeft: 6,
-                  fontSize: 12,
-                  alignSelf: 'center',
-                  marginRight: 4,
-                }}>
-                {item.eventStatus}
-              </Text>
-              <FontAwesomeIcon icon={faInfoCircle} size={16} color="#aaa" />
+              {item.eventStatus === 'accepted' ? (
+                <>
+                  <Text
+                    style={{
+                      marginLeft: 6,
+                      fontSize: 12,
+                      alignSelf: 'center',
+                      marginRight: 4,
+                    }}>
+                    تمت الموافقة
+                  </Text>
+                  <FontAwesomeIcon icon={faInfoCircle} size={16} color="#00D084" />
+                </>
+              ) : (
+                <>
+                  <Text
+                    style={{
+                      marginLeft: 6,
+                      fontSize: 12,
+                      alignSelf: 'center',
+                      marginRight: 4,
+                    }}>
+                    تحت المراجعة
+                  </Text>
+                  <FontAwesomeIcon icon={faInfoCircle} size={16} color="#FFC107" />
+                </>
+              )}
             </Left>
-            <Body >
+            <Body>
               <></>
             </Body>
             <Right style={{flex: 1, flexDirection: 'row'}}>
@@ -139,7 +149,7 @@ export default class BrowseEvOwner extends Component {
   render() {
     let {container, loader} = styles;
     let {items} = this.state;
-    if (items.length === 0) {
+    if (items.length === 0 && !this.state.isSearch) {
       return (
         <View style={loader}>
           <ActivityIndicator size="large" />
@@ -147,8 +157,15 @@ export default class BrowseEvOwner extends Component {
         </View>
       );
     }
-    return (
+    return this.state.isInfo ? (
+      <EventInfoEvOwner event={this.state.infoItem} isInfo={this} />
+    ) : (
       <>
+        <TopNavEvOwner
+          history={this.props.history}
+          eventsList={this.state.items}
+          changeState={this}
+        />
         <View style={styles.content}>
           <SafeAreaView>
             <FlatList
@@ -157,7 +174,11 @@ export default class BrowseEvOwner extends Component {
               keyExtractor={(item, index) => index.toString()}
               renderItem={this._renderItem}
               ListFooterComponent={this.last()}
-              ListEmptyComponent={<Text>لم يتم العثور على فعاليات</Text>}
+              ListEmptyComponent={
+                <Text style={{flex: 1, alignSelf: 'center'}}>
+                  عذرا، لم يتم العثور على نتائج بحث
+                </Text>
+              }
             />
           </SafeAreaView>
         </View>
@@ -175,7 +196,6 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
     width: '95%',
-    // zIndex: -1,
     top: 20,
   },
   cardText: {

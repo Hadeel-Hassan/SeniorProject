@@ -38,9 +38,12 @@ import {faUsers} from '@fortawesome/free-solid-svg-icons';
 import {db} from '../firebase/config';
 import TopNavGrid from './TopNavGrid';
 
+
 export default class BrowseGrid extends Component {
   state = {
     items: [],
+    isSearch: false,
+    isFilter: false,
   };
 
   componentWillMount() {
@@ -68,15 +71,21 @@ export default class BrowseGrid extends Component {
           <CardItem style={{height: 70}}>
             <Left>
               <Body>
-                <Text style={{color: '#bbb', alignSelf: 'flex-start', left: -18, top: 23}}>
+                <Text
+                  style={{
+                    color: '#bbb',
+                    alignSelf: 'flex-start',
+                    left: -18,
+                    top: 23,
+                  }}>
                   {item.event_type}
                 </Text>
                 <FontAwesomeIcon
-                icon={faHeart}
-                size={16}
-                color="#aaa"
-                style={{marginLeft: -16, top: -22}}
-              />
+                  icon={faHeart}
+                  size={16}
+                  color="#aaa"
+                  style={{marginLeft: -16, top: -22}}
+                />
               </Body>
             </Left>
             <Right>
@@ -103,12 +112,7 @@ export default class BrowseGrid extends Component {
                 }}>
                 {item.age_group}
               </Text>
-              <FontAwesomeIcon
-                icon={faUsers}
-                size={16}
-                color="#aaa"
-              />
-
+              <FontAwesomeIcon icon={faUsers} size={16} color="#aaa" />
             </Left>
             <Right style={{flex: 1, flexDirection: 'row', marginRight: -55}}>
               <Text
@@ -130,7 +134,8 @@ export default class BrowseGrid extends Component {
   render() {
     let {container, loader} = styles;
     let {items} = this.state;
-    if (items.length === 0) {
+    // console.log(this.state.isSearch);
+    if (items.length === 0 && !(this.state.isSearch) && !(this.state.isFilter)) {
       return (
         <View style={loader}>
           <ActivityIndicator size="large" />
@@ -140,7 +145,11 @@ export default class BrowseGrid extends Component {
     }
     return (
       <>
-        <TopNavGrid history={this.props.history} />
+        <TopNavGrid
+          history={this.props.history}
+          eventsList={this.state.items}
+          changeState={this}
+        />
         <View style={styles.content}>
           <SafeAreaView>
             <FlatList
@@ -149,6 +158,7 @@ export default class BrowseGrid extends Component {
               data={this.state.items}
               keyExtractor={(item, index) => index.toString()}
               renderItem={this._renderItem}
+              ListEmptyComponent={<Text>عذرا، لم يتم العثور على نتائج بحث</Text>}
             />
           </SafeAreaView>
         </View>
@@ -167,7 +177,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginTop: -380,
   },
   cardText: {
     fontSize: 18,

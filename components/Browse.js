@@ -8,49 +8,34 @@ import {
   FlatList,
   ActivityIndicator,
   SafeAreaView,
-  Alert
+  Alert,
 } from 'react-native';
 import BottomNavRegUser from './BottomNavRegUser';
 import TopNav from './TopNav';
-import {
-  Container,
-  Header,
-  Item,
-  Input,
-  Row,
-  Button,
-  Card,
-  CardItem,
-  Thumbnail,
-  Segment,
-  Left,
-  Right,
-  Icon,
-  Body,
-} from 'native-base';
+import {Card, CardItem, Left, Right, Body} from 'native-base';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faClock,
-  faCalendar,
   faCalendarAlt,
   faHeart,
 } from '@fortawesome/free-regular-svg-icons';
-import {
-  faUsers,
-  faHeart as faHeartSolid,
-} from '@fortawesome/free-solid-svg-icons';
+import {faUsers} from '@fortawesome/free-solid-svg-icons';
+import {db, getCurrentUserID, getCurrentUser} from '../firebase/config';
+import EventInfo from './EventInfo';
 
-import {db, getCurrentUserID} from '../firebase/config';
 export default class Browse extends Component {
   state = {
     items: [],
     isSearchActive: false,
-    test: 'hi',
+    isSearch: false,
+    isFilter: false,
     eventId: '',
+    isInfo: false,
+    infoItem: {},
   };
 
   last() {
-    return <View style={{paddingVertical: 20}}></View>;
+    return <View style={{paddingVertical: 20}} />;
   }
 
   componentWillMount() {
@@ -74,30 +59,34 @@ export default class Browse extends Component {
   }
 
   handleFavorite(eid, eventToAdd) {
-    db.collection('favorite')
-      .doc(`fav_${getCurrentUserID()}`)
-      .collection('my_favorites')
-      .doc(eid)
-      .set(eventToAdd)
-      .then(() => {
-        Alert.alert('تمت الإضافة للمفضلة', '', [{text: 'إغلاق'}]);
-      });
+    if (getCurrentUser()) {
+      db.collection('favorite')
+        .doc(`fav_${getCurrentUserID()}`)
+        .collection('my_favorites')
+        .doc(eid)
+        .set(eventToAdd)
+        .then(() => {
+          Alert.alert(' تمت إضافة الفعالية للمفضلة بنجاح!', '', [
+            {text: 'إغلاق'},
+          ]);
+        });
+    } else {
+      Alert.alert('', 'عذرا يجب عليك تسجيل الدخول أولا.', [{text: 'إغلاق'}]);
+    }
   }
 
   _renderItem = ({item, index}) => {
     return (
-      <TouchableOpacity style={styles.card}>
-        <Card style={{marginBottom: 20, width: 328, borderRadius: 10}}>
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => this.setState({isInfo: true, infoItem: item})}>
+        <Card style={{marginBottom: 20, width: 370, borderRadius: 10}}>
           <CardItem>
             <Left>
               <Body style={{flex: 1, flexDirection: 'row', marginLeft: -6}}>
                 <TouchableOpacity
                   onPress={() => this.handleFavorite(item.eid, item)}>
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    size={24}
-                    color="#aaa"
-                  />
+                  <FontAwesomeIcon icon={faHeart} size={24} color="#aaa" />
                 </TouchableOpacity>
                 <Text
                   style={{
@@ -167,7 +156,7 @@ export default class Browse extends Component {
   render() {
     let {container, loader} = styles;
     let {items} = this.state;
-    if (items.length === 0) {
+    if (items.length === 0 && !this.state.isSearch && !this.state.isFilter) {
       return (
         <View style={loader}>
           <ActivityIndicator size="large" />
@@ -177,24 +166,34 @@ export default class Browse extends Component {
     }
     return (
       <>
-        <TopNav
-          history={this.props.history}
-          eventsList={this.state.items}
-          changeState={this}
-        />
-        <View style={styles.content}>
-          <SafeAreaView>
-            <FlatList
-              style={container}
-              data={this.state.items}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={this._renderItem}
-              ListFooterComponent={this.last()}
-              ListEmptyComponent={<Text>لم يتم العثور على فعاليات</Text>}
+        {this.state.isInfo ? (
+          <EventInfo event={this.state.infoItem} isInfo={this} />
+        ) : (
+          <>
+            <TopNav
+              history={this.props.history}
+              eventsList={this.state.items}
+              changeState={this}
             />
-          </SafeAreaView>
-        </View>
-        <BottomNavRegUser history={this.props.history} />
+            <View style={styles.content}>
+              <SafeAreaView>
+                <FlatList
+                  style={container}
+                  data={this.state.items}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={this._renderItem}
+                  ListFooterComponent={this.last()}
+                  ListEmptyComponent={
+                    <Text style={{flex: 1, alignSelf: 'center'}}>
+                      عذرا، لم يتم العثور على نتائج بحث
+                    </Text>
+                  }
+                />
+              </SafeAreaView>
+            </View>
+            <BottomNavRegUser history={this.props.history} />
+          </>
+        )}
       </>
     );
   }

@@ -18,24 +18,52 @@ import {
 } from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faArrowAltCircleLeft} from '@fortawesome/free-solid-svg-icons';
-import {login, getCurrentUserID, addToFavorite} from '../firebase/config'
-
+import {
+  firebase_auth,
+  getCurrentUserID,
+  addToFavorite,
+} from '../firebase/config';
 
 export default class LandingPage extends Component {
-  state={
+  state = {
     email: '',
     password: '',
-  }
+  };
 
-  handleSignUp(){
-    if(this.state.email === '' || this.state.password === ''){
-    Alert.alert('خطأ في تسجيل الدخول', 'لم يتم إدخال كافة الحقول المطلوبة', [{text: 'إغلاق'}]);
+  handleSignUp() {
+    if (this.state.email === '' || this.state.password === '') {
+      Alert.alert('خطأ في تسجيل الدخول', 'لم يتم إدخال كافة الحقول المطلوبة', [
+        {text: 'إغلاق'},
+      ]);
+    } else {
+      firebase_auth
+        .signInWithEmailAndPassword(this.state.email, this.state.password)
+        .then(() => {
+          if (this.state.email === 'event_jeddah@gmail.com') {
+            this.props.history.push('/owhome');
+          } else {
+            this.props.history.push('/home');
+          }
+        })
+        .catch(error => {
+          switch (error.code) {
+            case 'auth/invalid-email':
+              Alert.alert(
+                'خطأ!',
+                'البريد الإلكتروني الذي قمت بإدخاله غير صحيح',
+                [{text: 'إغلاق'}],
+              );
+            case 'auth/invalid-password':
+              Alert.alert('خطأ!', 'كلمة المرور التي قمت بإدخالها غير صحيحة', [
+                {text: 'إغلاق'},
+              ]);
+            default:
+              Alert.alert('خطأ!', 'كلمة المرور التي قمت بإدخالها غير صحيحة', [
+                {text: 'إغلاق'},
+              ]);
+          }
+        });
     }
-    else{
-      login(this.state.email, this.state.password);
-      this.props.history.push("/home")
-    }
-    
   }
   render() {
     return (
@@ -47,34 +75,36 @@ export default class LandingPage extends Component {
           <View style={styles.container}>
             <Image
               style={styles.logo}
-              source={require('../images/logo_v1.png')}></Image>
+              source={require('../images/logo_v1.png')}
+            />
             <Text style={styles.title}>مرحبا بك في {'\n'} Saudi Vibes</Text>
-
             <View style={styles.signInContainer}>
               {/* multiline */}
-              <TextInput
-                style={styles.input}
-                placeholder="أدخل البريد الإلكتروني"
-                placeholderTextColor="darkgray"
-                keyboardType="email-address"
-                returnKeyType="next"
-                autoCorrect={false}
-                onChangeText={text => this.setState({email: text})}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="أدخل كلمة المرور"
-                placeholderTextColor="darkgray"
-                returnKeyType="next"
-                autoCorrect={false}
-                secureTextEntry
-                onChangeText={text => this.setState({password: text})}
-              />
+              <KeyboardAvoidingView behavior="padding">
+                <TextInput
+                  style={styles.input}
+                  placeholder="أدخل البريد الإلكتروني"
+                  placeholderTextColor="darkgray"
+                  keyboardType="email-address"
+                  returnKeyType="next"
+                  autoCorrect={false}
+                  onChangeText={text => this.setState({email: text})}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="أدخل كلمة المرور"
+                  placeholderTextColor="darkgray"
+                  returnKeyType="next"
+                  autoCorrect={false}
+                  secureTextEntry
+                  onChangeText={text => this.setState({password: text})}
+                />
+              </KeyboardAvoidingView>
               <Button
                 style={styles.signInBtn}
                 color="rgb(1, 106, 167)"
                 title="تسجيل الدخول"
-                onPress={(e) => this.handleSignUp()}
+                onPress={e => this.handleSignUp()}
               />
               <View style={styles.newUserContainer}>
                 <Button
@@ -89,11 +119,13 @@ export default class LandingPage extends Component {
           </View>
         </TouchableWithoutFeedback>
         <View style={styles.skipContainer}>
-          <TouchableOpacity style={styles.skip} onPress={() => this.props.history.push('/home')}>
+          <TouchableOpacity
+            style={styles.skip}
+            onPress={() => this.props.history.push('/home')}>
             <FontAwesomeIcon
               icon={faArrowAltCircleLeft}
               size={35}
-              color="rgb(56, 56, 56)"
+              color="#fd7066"
             />
             <Text style={styles.skip_txt}>تخطي</Text>
           </TouchableOpacity>
@@ -140,7 +172,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     position: 'relative',
     top: 60,
-    left: 20
+    left: 20,
   },
   skip: {
     display: 'flex',
