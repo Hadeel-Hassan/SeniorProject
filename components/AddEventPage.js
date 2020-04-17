@@ -18,7 +18,7 @@ import {faClock} from '@fortawesome/free-regular-svg-icons';
 import {Dropdown} from 'react-native-material-dropdown';
 import DatePicker from 'react-native-datepicker';
 import ImagePicker from 'react-native-image-picker';
-import {_addEvent} from '../firebase/config';
+import {_addEvent, getCurrentUserID} from '../firebase/config';
 import {Header} from 'react-native-elements';
 
 
@@ -85,6 +85,7 @@ export default class AddEventPage extends Component {
       description: this.state.eventDescription,
       eventStatus: this.state.status,
       price_Url: this.state.priceUrl,
+      ownerId: getCurrentUserID(),
     };
     _addEvent(formData, this.state.posterImage);
   }

@@ -1,18 +1,15 @@
 import React, {Component} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
-  StatusBar,
   Image,
   TouchableWithoutFeedback,
   TextInput,
   Keyboard,
   TouchableOpacity,
   KeyboardAvoidingView,
-  TouchableNativeFeedback,
+  Modal,
   Button,
   Alert,
 } from 'react-native';
@@ -20,15 +17,27 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faArrowAltCircleLeft} from '@fortawesome/free-solid-svg-icons';
 import {
   firebase_auth,
-  getCurrentUserID,
-  addToFavorite,
+  passwordReset
 } from '../firebase/config';
 
 export default class LandingPage extends Component {
   state = {
     email: '',
     password: '',
+    forgot_email: '',
+    isForget: false,
   };
+
+  handleForgetPassword() {
+    if (this.state.forgot_email === '') {
+      Alert.alert('خطأ', 'لم يتم إدخال البريد الإلكتروني', [
+          { text: 'إغلاق' },
+      ]);
+
+  } else {
+      passwordReset(this.state.forgot_email);
+  }
+  }
 
   handleSignUp() {
     if (this.state.email === '' || this.state.password === '') {
@@ -75,11 +84,10 @@ export default class LandingPage extends Component {
           <View style={styles.container}>
             <Image
               style={styles.logo}
-              source={require('../images/logo_v1.png')}
+              source={require('../images/logo_v2.png')}
             />
             <Text style={styles.title}>مرحبا بك في {'\n'} Saudi Vibes</Text>
             <View style={styles.signInContainer}>
-              {/* multiline */}
               <KeyboardAvoidingView behavior="padding">
                 <TextInput
                   style={styles.input}
@@ -100,20 +108,108 @@ export default class LandingPage extends Component {
                   onChangeText={text => this.setState({password: text})}
                 />
               </KeyboardAvoidingView>
+              <KeyboardAvoidingView behavior="position">
+              <Modal
+                transparent={true}
+                animationType="fade"
+                visible={this.state.isForget}>
+                <View
+                  style={{
+                    alignSelf: 'center',
+                    height: 300,
+                    justifyContent: 'center',
+                    backgroundColor: '#ccc',
+                    marginVertical: 180,
+                    paddingHorizontal: 50,
+                    borderRadius: 20,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 22,
+                      fontWeight: 'bold',
+                      alignSelf: 'center',
+                      marginVertical: 15,
+                    }}>
+                    استعادة كلمة المرور
+                  </Text>
+                  <TextInput
+                    style={{
+                      backgroundColor: 'white',
+                      width: 270,
+                      borderRadius: 10,
+                      height: 45,
+                    }}
+                    placeholder="أدخل بريدك الإلكتروني"
+                    placeholderTextColor="#373737"
+                    keyboardType="default"
+                    returnKeyType="next"
+                    autoCorrect={false}
+                    onChangeText={value => {
+                      this.setState({forgot_email: value});
+                    }}
+                  />
+                  <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                    <View
+                      style={{
+                        marginRight: 25,
+                        width: 100,
+                        marginTop: 20,
+                      }}>
+                      <Button
+                        title="إرسال"
+                        onPress={() => this.handleForgetPassword()}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        marginLeft: 25,
+                        width: 100,
+                        marginTop: 20,
+                      }}>
+                      <Button
+                        title="إغلاق"
+                        onPress={() => this.setState({isForget: false})}
+                      />
+                    </View>
+                  </View>
+                </View>
+              </Modal>
+            </KeyboardAvoidingView>
               <Button
                 style={styles.signInBtn}
                 color="rgb(1, 106, 167)"
                 title="تسجيل الدخول"
                 onPress={e => this.handleSignUp()}
               />
+              <TouchableOpacity onPress={()=> this.setState({isForget: true})}>
+                <Text
+                  style={{
+                    alignSelf: 'center',
+                    marginTop: 8,
+                    color: '#0693E3',
+                    fontSize: 17,
+                    textDecorationLine: 'underline',
+                  }}>
+                  هل نسيت كلمة المرور؟
+                </Text>
+              </TouchableOpacity>
               <View style={styles.newUserContainer}>
-                <Button
-                  title="حساب جديد"
-                  style={styles.newUserBtn}
-                  onPress={() => this.props.history.push('/signup')}
-                  color="rgb(1, 106, 167)"
-                />
-                <Text style={styles.newUser}>هل أنت مستخدم جديد؟</Text>
+                <TouchableOpacity
+                  onPress={() => this.props.history.push('/signup')}>
+                  <Text
+                    style={{
+                      marginHorizontal: 7,
+                      alignSelf: 'center',
+                      marginTop: 4,
+                      color: '#0693E3',
+                      fontSize: 16,
+                      textDecorationLine: 'underline',
+                    }}>
+                    أنشئ حسابك الآن
+                  </Text>
+                </TouchableOpacity>
+
+                <Text style={styles.newUser}>مستخدم جديد؟</Text>
               </View>
             </View>
           </View>
@@ -139,22 +235,18 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: -10,
   },
   title: {
-    // position: 'relative',
     fontSize: 35,
     color: 'black',
     opacity: 0.9,
   },
   logo: {
-    // position: 'relative',
     width: 132,
     height: 150,
   },
   signInContainer: {
-    // position: 'relative',
-    height: 200,
+    // height: 300,
     padding: 20,
     zIndex: -100,
   },
@@ -171,11 +263,10 @@ const styles = StyleSheet.create({
     zIndex: +1000,
     alignSelf: 'flex-start',
     position: 'relative',
-    top: 60,
-    left: 20,
+    top: 10,
+    left: 30,
   },
   skip: {
-    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -188,18 +279,15 @@ const styles = StyleSheet.create({
   newUser: {
     fontSize: 17,
     color: 'rgb(56, 56, 56)',
-    width: 200,
     textAlign: 'center',
     marginTop: 5,
-    zIndex: 10,
   },
   signInBtn: {
     marginVertical: 20,
-    // zIndex: 10,
   },
   newUserContainer: {
-    display: 'flex',
     flexDirection: 'row',
     marginVertical: 10,
+    alignSelf: 'center'
   },
 });

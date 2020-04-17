@@ -35,16 +35,35 @@ import {
   faHeart,
 } from '@fortawesome/free-regular-svg-icons';
 import {faUsers} from '@fortawesome/free-solid-svg-icons';
-import {db} from '../firebase/config';
+import {db, getCurrentUserID, getCurrentUser} from '../firebase/config';
 import TopNavGrid from './TopNavGrid';
-
+import EventInfo from './EventInfo';
 
 export default class BrowseGrid extends Component {
   state = {
     items: [],
     isSearch: false,
     isFilter: false,
+    isInfo: false,
+    infoItem: {},
   };
+
+  handleFavorite(eid, eventToAdd) {
+    if (getCurrentUser()) {
+      db.collection('favorite')
+        .doc(`fav_${getCurrentUserID()}`)
+        .collection('my_favorites')
+        .doc(eid)
+        .set(eventToAdd)
+        .then(() => {
+          Alert.alert(' تمت إضافة الفعالية للمفضلة بنجاح!', '', [
+            {text: 'إغلاق'},
+          ]);
+        });
+    } else {
+      Alert.alert('', 'عذرا يجب عليك تسجيل الدخول أولا.', [{text: 'إغلاق'}]);
+    }
+  }
 
   componentWillMount() {
     let d = [];
@@ -66,7 +85,9 @@ export default class BrowseGrid extends Component {
   }
   _renderItem = ({item, index}) => {
     return (
-      <TouchableOpacity style={styles.card}>
+      <TouchableOpacity
+        style={styles.card}
+        onPress={() => this.setState({isInfo: true, infoItem: item})}>
         <Card style={{marginBottom: 20, width: 170, borderRadius: 10}}>
           <CardItem style={{height: 70}}>
             <Left>
@@ -80,12 +101,15 @@ export default class BrowseGrid extends Component {
                   }}>
                   {item.event_type}
                 </Text>
-                <FontAwesomeIcon
-                  icon={faHeart}
-                  size={16}
-                  color="#aaa"
-                  style={{marginLeft: -16, top: -22}}
-                />
+                <TouchableOpacity
+                  onLongPress={() => this.handleFavorite(item.eid, item)}>
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    size={26}
+                    color="#aaa"
+                    style={{marginLeft: -16, top: -22, zIndex: 100}}
+                  />
+                </TouchableOpacity>
               </Body>
             </Left>
             <Right>
@@ -135,7 +159,7 @@ export default class BrowseGrid extends Component {
     let {container, loader} = styles;
     let {items} = this.state;
     // console.log(this.state.isSearch);
-    if (items.length === 0 && !(this.state.isSearch) && !(this.state.isFilter)) {
+    if (items.length === 0 && !this.state.isSearch && !this.state.isFilter) {
       return (
         <View style={loader}>
           <ActivityIndicator size="large" />
@@ -145,24 +169,32 @@ export default class BrowseGrid extends Component {
     }
     return (
       <>
-        <TopNavGrid
-          history={this.props.history}
-          eventsList={this.state.items}
-          changeState={this}
-        />
-        <View style={styles.content}>
-          <SafeAreaView>
-            <FlatList
-              numColumns={2}
-              style={container}
-              data={this.state.items}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={this._renderItem}
-              ListEmptyComponent={<Text>عذرا، لم يتم العثور على نتائج بحث</Text>}
+        {this.state.isInfo ? (
+          <EventInfo event={this.state.infoItem} isInfo={this} />
+        ) : (
+          <>
+            <TopNavGrid
+              history={this.props.history}
+              eventsList={this.state.items}
+              changeState={this}
             />
-          </SafeAreaView>
-        </View>
-        <BottomNavRegUser history={this.props.history} />
+            <View style={styles.content}>
+              <SafeAreaView>
+                <FlatList
+                  numColumns={2}
+                  style={container}
+                  data={this.state.items}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={this._renderItem}
+                  ListEmptyComponent={
+                    <Text>عذرا، لم يتم العثور على نتائج بحث</Text>
+                  }
+                />
+              </SafeAreaView>
+            </View>
+            <BottomNavRegUser history={this.props.history} />
+          </>
+        )}
       </>
     );
   }

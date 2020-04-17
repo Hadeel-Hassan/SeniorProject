@@ -29,10 +29,11 @@ import Browse from './components/Browse';
 import Favorite from './components/Favorite';
 import Chat from './components/Chat';
 import EventOwner from './components/EventOwner';
-
+import BrowseAdmin from './components/BrowseAdmin'
 import {decode, encode} from 'base-64';
 import BrowseGrid from './components/BrowseGrid';
 import UserProfile from './components/UserProfile';
+import ViewUsers  from "./components/ViewUsers";
 
 if (!global.btoa) {
   global.btoa = encode;

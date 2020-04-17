@@ -8,8 +8,6 @@ const Blob = RNFetchBlob.polyfill.Blob;
 const fs = RNFetchBlob.fs;
 const tempWindowXMLHttpRequest = window.XMLHttpRequest;
 
-let imgUrl;
-
 const config = {
   apiKey: 'AIzaSyAAWnkattEo93-hGgrsLwwv6zsznyj4kJI',
   authDomain: 'saudivibes-701df.firebaseapp.com',
@@ -25,6 +23,8 @@ const firebase = fb.initializeApp(config);
 export const db = firebase.firestore();
 const storage = firebase.storage();
 export const firebase_auth = firebase.auth();
+
+
 export function _addEvent(event, poster) {
   window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
   window.Blob = Blob;
@@ -78,6 +78,31 @@ export function edit(username) {
     });
 }
 
+export function passwordReset(email) {
+  firebase
+    .auth()
+    .sendPasswordResetEmail(email)
+    .then(() => {
+      Alert.alert(
+        'تم التحقق',
+        'تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني.',
+        [{text: 'موافق'}],
+      );
+    })
+    .catch(error => {
+      switch (error.code) {
+        case 'auth/invalid-email':
+          Alert.alert('خطأ!', 'البريد الإلكتروني الذي قمت بإدخاله غير صحيح', [
+            {text: 'إغلاق'},
+          ]);
+        default:
+          Alert.alert('خطأ!', 'البريد الإلكتروني الذي قمت بإدخاله ليس مسجل', [
+            {text: 'إغلاق'},
+          ]);
+      }
+    });
+}
+
 export function _editAvatar(avatar) {
   firebase
     .auth()
@@ -115,9 +140,11 @@ export function signup(email, password, username, avatar) {
             {text: 'إغلاق'},
           ]);
         case 'auth/invalid-password':
-          Alert.alert('خطأ!', 'كلمة السر غير صحيحة. يجب أن تكون من 6 رموز وأكثر.', [
-            {text: 'إغلاق'},
-          ]);
+          Alert.alert(
+            'خطأ!',
+            'كلمة السر غير صحيحة. يجب أن تكون من 6 رموز وأكثر.',
+            [{text: 'إغلاق'}],
+          );
       }
     });
 }

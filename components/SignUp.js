@@ -94,7 +94,7 @@ export default class SignUp extends Component {
           <FontAwesomeIcon
             icon={faArrowAltCircleLeft}
             size={40}
-            color="rgb(1, 106, 167)"
+            color="#fd7066"
           />
         </TouchableOpacity>
         <SafeAreaView style={{flex: 1, width: 300}}>
